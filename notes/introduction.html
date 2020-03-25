@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyG中基本概念 &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Creating Message Passing Networks" href="create_gnn.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#id1">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_gnn.html">Creating Message Passing Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#the-messagepassing-base-class">The “MessagePassing” Base Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#implementing-the-gcn-layer">Implementing the GCN Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#implementing-the-edge-convolution">Implementing the Edge Convolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_dataset.html">Creating Your Own Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">External Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>PyG中基本概念</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/notes/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="pyg">
+<h1>PyG中基本概念<a class="headerlink" href="#pyg" title="Permalink to this headline">¶</a></h1>
+<p>我们将简要介绍 PyTorch Geometric 的基本概念 through self-contained examples.
+At its core, PyTorch Geometric 提供以下主要功能：</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id4">图数据类</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id5">基准数据集</a></p></li>
+<li><p><a class="reference internal" href="#mini-batches" id="id6">Mini-batches</a></p></li>
+<li><p><a class="reference internal" href="#data-transforms" id="id7">Data Transforms</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id8">图网络端对端例子</a></p></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id4">图数据类</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>图被用于 model pairwise relations (edges) between objects (nodes).
+PyTorch Geometric中的图由 <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> 的实例来描述，该实例默认情况下具有以下属性：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data.x</span></code>: 节点特征矩阵 with shape <code class="docutils literal notranslate"><span class="pre">[num_nodes,</span> <span class="pre">num_node_features]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.edge_index</span></code>: COO 格式的图连接结构 with shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">num_edges]</span></code> and 数据类型 <code class="docutils literal notranslate"><span class="pre">torch.long</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.edge_attr</span></code>: 边特征矩阵 with shape <code class="docutils literal notranslate"><span class="pre">[num_edges,</span> <span class="pre">num_edge_features]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.y</span></code>: Target to train against (may have arbitrary shape), <em>e.g.</em>, node-level targets of shape <code class="docutils literal notranslate"><span class="pre">[num_nodes,</span> <span class="pre">*]</span></code> or graph-level targets of shape <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">*]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data.pos</span></code>: 节点位置矩阵 with shape <code class="docutils literal notranslate"><span class="pre">[num_nodes,</span> <span class="pre">num_dimensions]</span></code></p></li>
+</ul>
+<p>这些属性都不是必需的。 实际上， the <code class="docutils literal notranslate"><span class="pre">Data</span></code> object is not even restricted to these attributes. 例如, We can extend it by <code class="docutils literal notranslate"><span class="pre">data.face</span></code> to save the connectivity of triangles from a 3D mesh in a tensor with shape <code class="docutils literal notranslate"><span class="pre">[3,</span> <span class="pre">num_faces]</span></code> and type <code class="docutils literal notranslate"><span class="pre">torch.long</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PyTorch and <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> define an example as a tuple of an image and a target. 我们在 PyTorch Geometric 中放弃了这种表示法 to allow for various data structures in a clean and understandable way.</p>
+</div>
+<p>我们展示一个简单的例子 of an unweighted and undirected graph with three nodes and four edges. 每个节点包含一个特征:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">Data</span>
+
+<span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/graph.svg"><div align="center" class="align-center"><img alt="../_images/graph.svg" src="../_images/graph.svg" width="300px" /></div>
+</a>
+<p>请注意，<code class="docutils literal notranslate"><span class="pre">edge_index</span></code>，即定义所有边的源节点和目标节点的张量，它不是索引元组的列表。
+如果要以这种方式编写索引，则应在将索引传递给数据构造函数之前，对其转置并调用 <code class="docutils literal notranslate"><span class="pre">contiguous</span></code> 方法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">Data</span>
+
+<span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                           <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">t</span><span class="p">()</span><span class="o">.</span><span class="n">contiguous</span><span class="p">())</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>尽管图只有两条边，但是我们需要定义四个索引元组以说明边的两个方向。</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>您可以随时打印出数据对象，并获得有关其属性及其形状的简短信息。</p>
+</div>
+<p>Besides of being a plain old python object, <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> provides a number of utility functions, <em>e.g.</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;edge_index&#39;</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">1.0</span><span class="p">]])</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{} found in data&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">edge_index</span> <span class="n">found</span> <span class="ow">in</span> <span class="n">data</span>
+
+<span class="s1">&#39;edge_attr&#39;</span> <span class="ow">in</span> <span class="n">data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">False</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">3</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">num_edges</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">num_node_features</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">contains_isolated_nodes</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">False</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">contains_self_loops</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">False</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">is_directed</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">False</span>
+
+<span class="c1"># Transfer data object to GPU.</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can find a complete list of all methods at <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a>.</p>
+</div>
+<div class="section" id="id2">
+<h2><a class="toc-backref" href="#id5">基准数据集</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>PyTorch Geometric 包含大量常见基准数据集，例如所有 Planetoid 数据集（Cora，Citeseer，Pubmed）all graph classification datasets from <a class="reference external" href="http://graphkernels.cs.tu-dortmund.de/">http://graphkernels.cs.tu-dortmund.de/</a> and their <a class="reference external" href="https://github.com/nd7141/graph_datasets">cleaned versions</a>, QM7和QM9数据集, and a handful of 3D mesh/point cloud datasets like FAUST, ModelNet10/40 and ShapeNet.</p>
+<p>初始化数据集很简单。数据集的初始化将自动下载其原始文件，并将其处理为先前描述的 <code class="docutils literal notranslate"><span class="pre">Data</span></code> 格式。
+例如，要加载 ENZYMES 数据集(consisting of 600 graphs within 6 classes)，请输入：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">TUDataset</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ENZYMES&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ENZYMES&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ENZYMES</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">600</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">num_classes</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">6</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">num_node_features</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>现在，我们可以访问数据集中的所有600个图：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">168</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">37</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">is_undirected</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>我们可以看到数据集中的第一个图包含37个节点，每个节点都有3个特征。有168/2 = 84条无向边，并且该图is assigned to exactly one class. In addition, the data object is holding exactly one graph-level target.</p>
+<p>(分割数据集) We can even use slices, long or byte tensors to split the dataset.
+<em>E.g.</em>, to create a 90/10 train/test split, type:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[:</span><span class="mi">540</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ENZYMES</span><span class="p">(</span><span class="mi">540</span><span class="p">)</span>
+
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">540</span><span class="p">:]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ENZYMES</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you are unsure whether the dataset is already shuffled before you split, you can randomly permutate it by running:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ENZYMES</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这个相当于如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">perm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">perm</span><span class="p">]</span>
+<span class="o">&gt;&gt;</span> <span class="n">ENZYMES</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>让我们再尝试另外一个数据集 Cora，这是用于半监督图节点分类的标准基准数据集：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">Planetoid</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Planetoid</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/Cora&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cora&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Cora</span><span class="p">()</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">num_classes</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">7</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">num_node_features</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">1433</span>
+</pre></div>
+</div>
+<p>Here, the dataset contains only a single, undirected citation graph:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10556</span><span class="p">],</span> <span class="n">test_mask</span><span class="o">=</span><span class="p">[</span><span class="mi">2708</span><span class="p">],</span>
+         <span class="n">train_mask</span><span class="o">=</span><span class="p">[</span><span class="mi">2708</span><span class="p">],</span> <span class="n">val_mask</span><span class="o">=</span><span class="p">[</span><span class="mi">2708</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">2708</span><span class="p">,</span> <span class="mi">1433</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">2708</span><span class="p">])</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">is_undirected</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="bp">True</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">140</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">val_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">500</span>
+
+<span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>This time, the <code class="docutils literal notranslate"><span class="pre">Data</span></code> objects holds a label for each node, and additional attributes: <code class="docutils literal notranslate"><span class="pre">train_mask</span></code>, <code class="docutils literal notranslate"><span class="pre">val_mask</span></code> and <code class="docutils literal notranslate"><span class="pre">test_mask</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train_mask</span></code> denotes against which nodes to train (140 nodes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val_mask</span></code> denotes which nodes to use for validation, <em>e.g.</em>, to perform early stopping (500 nodes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_mask</span></code> denotes against which nodes to test (1000 nodes)</p></li>
+</ul>
+</div>
+<div class="section" id="mini-batches">
+<h2><a class="toc-backref" href="#id6">Mini-batches</a><a class="headerlink" href="#mini-batches" title="Permalink to this headline">¶</a></h2>
+<p>(Networks 的批量化并行训练) Neural networks are usually trained in a batch-wise fashion. PyTorch Geometric achieves parallelization over a mini-batch by creating sparse block diagonal adjacency matrices (defined by <code class="docutils literal notranslate"><span class="pre">edge_index</span></code> and <code class="docutils literal notranslate"><span class="pre">edge_attr</span></code>) and concatenating feature and target matrices in the node dimension. This composition allows differing number of nodes and edges over examples in one batch:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{A} = \begin{bmatrix} \mathbf{A}_1 &amp; &amp; \\ &amp; \ddots &amp; \\ &amp; &amp; \mathbf{A}_n \end{bmatrix}, \qquad \mathbf{X} = \begin{bmatrix} \mathbf{X}_1 \\ \vdots \\ \mathbf{X}_n \end{bmatrix}, \qquad \mathbf{Y} = \begin{bmatrix} \mathbf{Y}_1 \\ \vdots \\ \mathbf{Y}_n \end{bmatrix}\end{split}\]</div>
+<p>(数据的批量载入) PyTorch Geometric contains its own <a class="reference internal" href="../modules/data.html#torch_geometric.data.DataLoader" title="torch_geometric.data.DataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.DataLoader</span></code></a>, which already takes care of this concatenation process.
+Let’s learn about it in an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">TUDataset</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ENZYMES&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ENZYMES&#39;</span><span class="p">,</span> <span class="n">use_node_attr</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+    <span class="n">batch</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">Batch</span><span class="p">(</span><span class="n">batch</span><span class="o">=</span><span class="p">[</span><span class="mi">1082</span><span class="p">],</span> <span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4066</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1082</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">])</span>
+
+    <span class="n">batch</span><span class="o">.</span><span class="n">num_graphs</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">32</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../modules/data.html#torch_geometric.data.Batch" title="torch_geometric.data.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Batch</span></code></a> 继承自 <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> 并包含额外的属性 <code class="docutils literal notranslate"><span class="pre">batch</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">batch</span></code> is a column vector which maps each node to its respective graph in the batch:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{batch} = {\begin{bmatrix} 0 &amp; \cdots &amp; 0 &amp; 1 &amp; \cdots &amp; n - 2 &amp; n -1 &amp; \cdots &amp; n - 1 \end{bmatrix}}^{\top}\]</div>
+<p>You can use it to, <em>e.g.</em>, average node features in the node dimension for each graph individually:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_scatter</span> <span class="kn">import</span> <span class="n">scatter_mean</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">TUDataset</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ENZYMES&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ENZYMES&#39;</span><span class="p">,</span> <span class="n">use_node_attr</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+    <span class="n">data</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">Batch</span><span class="p">(</span><span class="n">batch</span><span class="o">=</span><span class="p">[</span><span class="mi">1082</span><span class="p">],</span> <span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4066</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">1082</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">num_graphs</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="mi">32</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">scatter_mean</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">batch</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="o">&gt;&gt;&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">21</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>您可以了解有关 PyTorch Geometric 的内部批处理程序的更多信息, <em>e.g.</em>, how to modify its behaviour, <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/notes/batching.html">here</a>.
+For documentation of scatter operations, we refer the interested reader to the <code class="docutils literal notranslate"><span class="pre">torch-scatter</span></code> <a class="reference external" href="https://pytorch-scatter.readthedocs.io">documentation</a>.</p>
+</div>
+<div class="section" id="data-transforms">
+<h2><a class="toc-backref" href="#id7">Data Transforms</a><a class="headerlink" href="#data-transforms" title="Permalink to this headline">¶</a></h2>
+<p>Transforms are a common way in <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> to transform images and perform augmentation. PyTorch Geometric带有自己的 transforms，将 <code class="docutils literal notranslate"><span class="pre">Data</span></code> 对象作为输入并返回一个新的变换后的 <code class="docutils literal notranslate"><span class="pre">Data</span></code> 对象。 Transforms can be chained together using <a class="reference internal" href="../modules/transforms.html#torch_geometric.transforms.Compose" title="torch_geometric.transforms.Compose"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.transforms.Compose</span></code></a> and are applied before saving a processed dataset on disk (<code class="docutils literal notranslate"><span class="pre">pre_transform</span></code>) or before accessing a graph in a dataset (<code class="docutils literal notranslate"><span class="pre">transform</span></code>).</p>
+<p>让我们看一个示例，在该示例上，我们对 ShapeNet 数据集上应用 transforms(containing 17,000 3D shape point clouds and per point labels from 16 shape categories)。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">ShapeNet</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ShapeNet</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ShapeNet&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Airplane&#39;</span><span class="p">])</span>
+
+<span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>We can convert the point cloud dataset into a graph dataset by generating nearest neighbor graphs from the point clouds via transforms:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch_geometric.transforms</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">ShapeNet</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ShapeNet</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ShapeNet&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Airplane&#39;</span><span class="p">],</span>
+                    <span class="n">pre_transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">KNNGraph</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">15108</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">pre_transform</span></code> to convert the data before saving it to disk (从而缩短了加载时间).
+Note that the next time the dataset is initialized it will already contain graph edges, even if you do not pass any transform.</p>
+</div>
+<p>In addition, we can use the <code class="docutils literal notranslate"><span class="pre">transform</span></code> argument to randomly augment a <code class="docutils literal notranslate"><span class="pre">Data</span></code> object, <em>e.g.</em> translating each node position by a small number:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch_geometric.transforms</span> <span class="kn">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">ShapeNet</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ShapeNet</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/ShapeNet&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Airplane&#39;</span><span class="p">],</span>
+                    <span class="n">pre_transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">KNNGraph</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">RandomTranslate</span><span class="p">(</span><span class="mf">0.01</span><span class="p">))</span>
+
+<span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Data</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">15108</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">2518</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>You can find a complete list of all implemented transforms at <a class="reference internal" href="../modules/transforms.html#module-torch_geometric.transforms" title="torch_geometric.transforms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">torch_geometric.transforms</span></code></a>.</p>
+</div>
+<div class="section" id="id3">
+<h2><a class="toc-backref" href="#id8">图网络端对端例子</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>在了解了PyTorch Geometric中的数据处理，数据集，loader and transforms 之后，是时候实现我们的第一个图神经网络了！ We will use a simple GCN layer and replicate the experiments on the Cora citation dataset. 有关 GCN 的更深解释, 请参考 <a class="reference external" href="http://tkipf.github.io/graph-convolutional-networks/">blog post</a>.</p>
+<p>我们首先需要加载Cora数据集：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">Planetoid</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Planetoid</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;/tmp/Cora&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cora&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Cora</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that we do not need to use transforms or a dataloader.
+Now let’s implement a two-layer GCN:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="kn">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">GCNConv</span>
+
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_node_features</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constructor defines two <code class="docutils literal notranslate"><span class="pre">GCNConv</span></code> layers which get called in the forward pass of our network. Note that the non-linearity is not integrated in the <code class="docutils literal notranslate"><span class="pre">conv</span></code> calls and hence needs to be applied afterwards (something which is consistent accross all operators in PyTorch Geometric). Here, we chose to use ReLU as our intermediate non-linearity between and finally output a softmax distribution over the number of classes.</p>
+<p>我们在 train nodes 上训练此模型 200 个 epochs：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="mf">5e-4</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">nll_loss</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="p">])</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>最后，我们可以在 test nodes 上评估模型：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">correct</span> <span class="o">=</span> <span class="nb">float</span> <span class="p">(</span><span class="n">pred</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">correct</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Accuracy: {:.4f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">0.8150</span>
+</pre></div>
+</div>
+<p>这就是实现您的第一个图神经网络所需要的。了解图卷积和池化的最简单方法是 to study the examples in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory and to browse <code class="xref py py-mod docutils literal notranslate"><span class="pre">torch_geometric.nn</span></code>.
+Happy hacking!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="create_gnn.html" class="btn btn-neutral float-right" title="Creating Message Passing Networks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

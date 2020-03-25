@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.transforms.laplacian_lambda_max &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id1">安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/introduction.html">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#id2">边卷积层的实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_dataset.html">构建数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/resources.html">相关资料</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torch_geometric.transforms.laplacian_lambda_max</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torch_geometric.transforms.laplacian_lambda_max</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="k">import</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">eigsh</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.utils</span> <span class="k">import</span> <span class="n">get_laplacian</span><span class="p">,</span> <span class="n">to_scipy_sparse_matrix</span>
+
+
+<div class="viewcode-block" id="LaplacianLambdaMax"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.LaplacianLambdaMax">[docs]</a><span class="k">class</span> <span class="nc">LaplacianLambdaMax</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes the highest eigenvalue of the graph Laplacian given by</span>
+<span class="sd">    :meth:`torch_geometric.utils.get_laplacian`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        normalization (str, optional): The normalization scheme for the graph</span>
+<span class="sd">            Laplacian (default: :obj:`None`):</span>
+
+<span class="sd">            1. :obj:`None`: No normalization</span>
+<span class="sd">            :math:`\mathbf{L} = \mathbf{D} - \mathbf{A}`</span>
+
+<span class="sd">            2. :obj:`&quot;sym&quot;`: Symmetric normalization</span>
+<span class="sd">            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{A}</span>
+<span class="sd">            \mathbf{D}^{-1/2}`</span>
+
+<span class="sd">            3. :obj:`&quot;rw&quot;`: Random-walk normalization</span>
+<span class="sd">            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1} \mathbf{A}`</span>
+<span class="sd">        is_undirected (bool, optional): If set to :obj:`True`, this transform</span>
+<span class="sd">            expects undirected graphs as input, and can hence speed up the</span>
+<span class="sd">            computation of the largest eigenvalue. (default: :obj:`False`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_undirected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">normalization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;sym&#39;</span><span class="p">,</span> <span class="s1">&#39;rw&#39;</span><span class="p">],</span> <span class="s1">&#39;Invalid normalization&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">=</span> <span class="n">normalization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_undirected</span> <span class="o">=</span> <span class="n">is_undirected</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span>
+        <span class="k">if</span> <span class="n">edge_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">edge_weight</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_edges</span><span class="p">:</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">get_laplacian</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">,</span>
+                                                <span class="n">num_nodes</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span>
+
+        <span class="n">L</span> <span class="o">=</span> <span class="n">to_scipy_sparse_matrix</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span>
+
+        <span class="n">eig_fn</span> <span class="o">=</span> <span class="n">eigs</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_undirected</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span> <span class="o">!=</span> <span class="s1">&#39;rw&#39;</span><span class="p">:</span>
+            <span class="n">eig_fn</span> <span class="o">=</span> <span class="n">eigsh</span>
+
+        <span class="n">lambda_max</span> <span class="o">=</span> <span class="n">eig_fn</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;LM&#39;</span><span class="p">,</span> <span class="n">return_eigenvectors</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">lambda_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lambda_max</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(normalization=</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">normalization</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

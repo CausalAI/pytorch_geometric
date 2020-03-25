@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.data.cluster &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id1">安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/introduction.html">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#id2">边卷积层的实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_dataset.html">构建数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/resources.html">相关资料</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torch_geometric.data.cluster</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torch_geometric.data.cluster</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.utils.data</span>
+<span class="kn">from</span> <span class="nn">torch_sparse</span> <span class="k">import</span> <span class="n">SparseTensor</span><span class="p">,</span> <span class="n">cat</span>
+
+
+<div class="viewcode-block" id="ClusterData"><a class="viewcode-back" href="../../../modules/data.html#torch_geometric.data.ClusterData">[docs]</a><span class="k">class</span> <span class="nc">ClusterData</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Clusters/partitions a graph data object into multiple subgraphs, as</span>
+<span class="sd">    motivated by the `&quot;Cluster-GCN: An Efficient Algorithm for Training Deep</span>
+<span class="sd">    and Large Graph Convolutional Networks&quot;</span>
+<span class="sd">    &lt;https://arxiv.org/abs/1905.07953&gt;`_ paper.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (torch_geometric.data.Data): The graph data object.</span>
+<span class="sd">        num_parts (int): The number of partitions.</span>
+<span class="sd">        recursive (bool, optional): If set to :obj:`True`, will use multilevel</span>
+<span class="sd">            recursive bisection instead of multilevel k-way partitioning.</span>
+<span class="sd">            (default: :obj:`False`)</span>
+<span class="sd">        save_dir (string, optional): If set, will save the partitioned data to</span>
+<span class="sd">            the :obj:`save_dir` directory for faster re-use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">num_parts</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="n">recursive_str</span> <span class="o">=</span> <span class="s1">&#39;_recursive&#39;</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;partition_</span><span class="si">{num_parts}{recursive_str}</span><span class="s1">.pt&#39;</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">osp</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">adj</span><span class="p">,</span> <span class="n">partptr</span><span class="p">,</span> <span class="n">perm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">),</span> <span class="n">edge_attr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span>
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">SparseTensor</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">edge_attr</span><span class="p">)</span>
+            <span class="n">adj</span><span class="p">,</span> <span class="n">partptr</span><span class="p">,</span> <span class="n">perm</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">num_parts</span><span class="p">,</span> <span class="n">recursive</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">((</span><span class="n">adj</span><span class="p">,</span> <span class="n">partptr</span><span class="p">,</span> <span class="n">perm</span><span class="p">),</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">permute_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partptr</span> <span class="o">=</span> <span class="n">partptr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perm</span> <span class="o">=</span> <span class="n">perm</span>
+
+    <span class="k">def</span> <span class="nf">permute_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">perm</span><span class="p">,</span> <span class="n">adj</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_nodes</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="n">perm</span><span class="p">]</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">partptr</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partptr</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">partptr</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">start</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_nodes</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">narrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">narrow</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">coo</span><span class="p">()</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.__class__.__name__}</span><span class="s1">(</span><span class="si">{self.data}</span><span class="s1">, &#39;</span>
+                <span class="n">f</span><span class="s1">&#39;num_parts=</span><span class="si">{self.num_parts}</span><span class="s1">)&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ClusterLoader"><a class="viewcode-back" href="../../../modules/data.html#torch_geometric.data.ClusterLoader">[docs]</a><span class="k">class</span> <span class="nc">ClusterLoader</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The data loader scheme from the `&quot;Cluster-GCN: An Efficient Algorithm</span>
+<span class="sd">    for Training Deep and Large Graph Convolutional Networks&quot;</span>
+<span class="sd">    &lt;https://arxiv.org/abs/1905.07953&gt;`_ paper which merges partioned subgraphs</span>
+<span class="sd">    and their between-cluster links from a large-scale graph data object to</span>
+<span class="sd">    form a mini-batch.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cluster_data (torch_geometric.data.ClusterData): The already</span>
+<span class="sd">            partioned data object.</span>
+<span class="sd">        batch_size (int, optional): How many samples per batch to load.</span>
+<span class="sd">            (default: :obj:`1`)</span>
+<span class="sd">        shuffle (bool, optional): If set to :obj:`True`, the data will be</span>
+<span class="sd">            reshuffled at every epoch. (default: :obj:`False`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">HelperDataset</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_data</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cluster_data</span><span class="o">.</span><span class="n">partptr</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cluster_data</span><span class="o">.</span><span class="n">partptr</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">start</span>
+
+                <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cluster_data</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_nodes</span><span class="p">:</span>
+                        <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">narrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">idx</span>
+
+        <span class="k">def</span> <span class="nf">collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+            <span class="n">parts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+            <span class="n">partptr</span> <span class="o">=</span> <span class="n">cluster_data</span><span class="o">.</span><span class="n">partptr</span>
+
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">cat</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">adj</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+            <span class="n">adjs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="n">partptr</span><span class="p">[</span><span class="n">part</span><span class="p">]</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="n">partptr</span><span class="p">[</span><span class="n">part</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">start</span>
+                <span class="n">adjs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adj</span><span class="o">.</span><span class="n">narrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">))</span>
+            <span class="n">adj</span> <span class="o">=</span> <span class="n">cat</span><span class="p">(</span><span class="n">adjs</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+            <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">coo</span><span class="p">()</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">cluster_data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="vm">__class__</span><span class="p">()</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">keys</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;adj&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ref</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ref</span><span class="o">.</span><span class="n">adj</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">],</span>
+                                          <span class="n">dim</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">__cat_dim__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">ref</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+
+            <span class="k">return</span> <span class="n">data</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">ClusterLoader</span><span class="p">,</span>
+              <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">HelperDataset</span><span class="p">(),</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="p">,</span>
+                             <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

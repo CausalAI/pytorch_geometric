@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.datasets.qm9 &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id1">安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/introduction.html">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#id2">边卷积层的实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_dataset.html">构建数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/resources.html">相关资料</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torch_geometric.datasets.qm9</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torch_geometric.datasets.qm9</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">torch_sparse</span> <span class="k">import</span> <span class="n">coalesce</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="k">import</span> <span class="p">(</span><span class="n">InMemoryDataset</span><span class="p">,</span> <span class="n">download_url</span><span class="p">,</span> <span class="n">extract_zip</span><span class="p">,</span>
+                                  <span class="n">Data</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">rdkit</span>
+    <span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">Chem</span>
+    <span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">rdBase</span>
+    <span class="kn">from</span> <span class="nn">rdkit.Chem.rdchem</span> <span class="k">import</span> <span class="n">HybridizationType</span>
+    <span class="kn">from</span> <span class="nn">rdkit</span> <span class="k">import</span> <span class="n">RDConfig</span>
+    <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="k">import</span> <span class="n">ChemicalFeatures</span>
+    <span class="kn">from</span> <span class="nn">rdkit.Chem.rdchem</span> <span class="k">import</span> <span class="n">BondType</span> <span class="k">as</span> <span class="n">BT</span>
+    <span class="n">rdBase</span><span class="o">.</span><span class="n">DisableLog</span><span class="p">(</span><span class="s1">&#39;rdApp.error&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">rdkit</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="QM9"><a class="viewcode-back" href="../../../modules/datasets.html#torch_geometric.datasets.QM9">[docs]</a><span class="k">class</span> <span class="nc">QM9</span><span class="p">(</span><span class="n">InMemoryDataset</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The QM9 dataset from the `&quot;MoleculeNet: A Benchmark for Molecular</span>
+<span class="sd">    Machine Learning&quot; &lt;https://arxiv.org/abs/1703.00564&gt;`_ paper, consisting of</span>
+<span class="sd">    about 130,000 molecules with 16 regression targets.</span>
+<span class="sd">    Each molecule includes complete spatial information for the single low</span>
+<span class="sd">    energy conformation of the atoms in the molecule.</span>
+<span class="sd">    In addition, we provide the atom features from the `&quot;Neural Message</span>
+<span class="sd">    Passing for Quantum Chemistry&quot; &lt;https://arxiv.org/abs/1704.01212&gt;`_ paper.</span>
+
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | Target | Property                         | Description                                                                       | Unit                                        |</span>
+<span class="sd">    +========+==================================+===================================================================================+=============================================+</span>
+<span class="sd">    | 0      | :math:`\mu`                      | Dipole moment                                                                     | :math:`\textrm{D}`                          |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 1      | :math:`\alpha`                   | Isotropic polarizability                                                          | :math:`{a_0}^3`                             |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 2      | :math:`\epsilon_{\textrm{HOMO}}` | Highest occupied molecular orbital energy                                         | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 3      | :math:`\epsilon_{\textrm{LUMO}}` | Lowest unoccupied molecular orbital energy                                        | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 4      | :math:`\Delta \epsilon`          | Gap between :math:`\epsilon_{\textrm{HOMO}}` and :math:`\epsilon_{\textrm{LUMO}}` | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 5      | :math:`\langle R^2 \rangle`      | Electronic spatial extent                                                         | :math:`{a_0}^2`                             |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 6      | :math:`\textrm{ZPVE}`            | Zero point vibrational energy                                                     | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 7      | :math:`U_0`                      | Internal energy at 0K                                                             | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 8      | :math:`U`                        | Internal energy at 298.15K                                                        | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 9      | :math:`H`                        | Enthalpy at 298.15K                                                               | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 10     | :math:`G`                        | Free energy at 298.15K                                                            | :math:`E_{\textrm{h}}`                      |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 11     | :math:`c_{\textrm{v}}`           | Heat capavity at 298.15K                                                          | :math:`\frac{\textrm{cal}}{\textrm{mol K}}` |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 12     | :math:`U_0^{\textrm{ATOM}}`      | Atomization energy at 0K                                                          | :math:`\frac{\textrm{kcal}}{\textrm{mol}}`  |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 13     | :math:`U^{\textrm{ATOM}}`        | Atomization energy at 298.15K                                                     | :math:`\frac{\textrm{kcal}}{\textrm{mol}}`  |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 14     | :math:`H^{\textrm{ATOM}}`        | Atomization enthalpy at 298.15K                                                   | :math:`\frac{\textrm{kcal}}{\textrm{mol}}`  |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+<span class="sd">    | 15     | :math:`G^{\textrm{ATOM}}`        | Atomization free energy at 298.15K                                                | :math:`\frac{\textrm{kcal}}{\textrm{mol}}`  |</span>
+<span class="sd">    +--------+----------------------------------+-----------------------------------------------------------------------------------+---------------------------------------------+</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        root (string): Root directory where the dataset should be saved.</span>
+<span class="sd">        transform (callable, optional): A function/transform that takes in an</span>
+<span class="sd">            :obj:`torch_geometric.data.Data` object and returns a transformed</span>
+<span class="sd">            version. The data object will be transformed before every access.</span>
+<span class="sd">            (default: :obj:`None`)</span>
+<span class="sd">        pre_transform (callable, optional): A function/transform that takes in</span>
+<span class="sd">            an :obj:`torch_geometric.data.Data` object and returns a</span>
+<span class="sd">            transformed version. The data object will be transformed before</span>
+<span class="sd">            being saved to disk. (default: :obj:`None`)</span>
+<span class="sd">        pre_filter (callable, optional): A function that takes in an</span>
+<span class="sd">            :obj:`torch_geometric.data.Data` object and returns a boolean</span>
+<span class="sd">            value, indicating whether the data object should be included in the</span>
+<span class="sd">            final dataset. (default: :obj:`None`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+    <span class="n">raw_url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;https://s3-us-west-1.amazonaws.com/deepchem.io/datasets/&#39;</span>
+               <span class="s1">&#39;molnet_publish/qm9.zip&#39;</span><span class="p">)</span>
+    <span class="n">processed_url</span> <span class="o">=</span> <span class="s1">&#39;http://www.roemisch-drei.de/qm9.zip&#39;</span>
+
+    <span class="k">if</span> <span class="n">rdkit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+        <span class="n">bonds</span> <span class="o">=</span> <span class="p">{</span><span class="n">BT</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">BT</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">BT</span><span class="o">.</span><span class="n">TRIPLE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">BT</span><span class="o">.</span><span class="n">AROMATIC</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pre_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">pre_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">QM9</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">pre_transform</span><span class="p">,</span> <span class="n">pre_filter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">raw_file_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;qm9.pt&#39;</span> <span class="k">if</span> <span class="n">rdkit</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="s1">&#39;gdb9.sdf&#39;</span><span class="p">,</span> <span class="s1">&#39;gdb9.sdf.csv&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">processed_file_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;data.pt&#39;</span>
+
+    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_url</span> <span class="k">if</span> <span class="n">rdkit</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_url</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">download_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_dir</span><span class="p">)</span>
+        <span class="n">extract_zip</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rdkit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Using a pre-processed version of the dataset. Please &#39;</span>
+                  <span class="s1">&#39;install `rdkit` to alternatively process the raw data.&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data_list</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_filter</span><span class="p">(</span><span class="n">d</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pre_transform</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">]</span>
+
+            <span class="n">data</span><span class="p">,</span> <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collate</span><span class="p">(</span><span class="n">data_list</span><span class="p">)</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">slices</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_paths</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="mi">20</span><span class="p">]]</span>
+                      <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">target</span><span class="p">]</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="n">suppl</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SDMolSupplier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">removeHs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">fdef_name</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RDConfig</span><span class="o">.</span><span class="n">RDDataDir</span><span class="p">,</span> <span class="s1">&#39;BaseFeatures.fdef&#39;</span><span class="p">)</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">ChemicalFeatures</span><span class="o">.</span><span class="n">BuildFeatureFactory</span><span class="p">(</span><span class="n">fdef_name</span><span class="p">)</span>
+
+        <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mol</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">suppl</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">text</span> <span class="o">=</span> <span class="n">suppl</span><span class="o">.</span><span class="n">GetItemText</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="mi">4</span> <span class="o">+</span> <span class="n">N</span><span class="p">]</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">]</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+            <span class="n">type_idx</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">atomic_number</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">acceptor</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">donor</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">aromatic</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">sp2</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">sp3</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">num_hs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                <span class="n">type_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()])</span>
+                <span class="n">atomic_number</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">())</span>
+                <span class="n">donor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">acceptor</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">aromatic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIsAromatic</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">hybridization</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetHybridization</span><span class="p">()</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">hybridization</span> <span class="o">==</span> <span class="n">HybridizationType</span><span class="o">.</span><span class="n">SP</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">sp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">hybridization</span> <span class="o">==</span> <span class="n">HybridizationType</span><span class="o">.</span><span class="n">SP2</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">sp3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">hybridization</span> <span class="o">==</span> <span class="n">HybridizationType</span><span class="o">.</span><span class="n">SP3</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">num_hs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetTotalNumHs</span><span class="p">(</span><span class="n">includeNeighbors</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+            <span class="n">feats</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">GetFeaturesForMol</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">feats</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">feats</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">GetFamily</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Donor&#39;</span><span class="p">:</span>
+                    <span class="n">node_list</span> <span class="o">=</span> <span class="n">feats</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">GetAtomIds</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+                        <span class="n">donor</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">feats</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">GetFamily</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Acceptor&#39;</span><span class="p">:</span>
+                    <span class="n">node_list</span> <span class="o">=</span> <span class="n">feats</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">GetAtomIds</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+                        <span class="n">acceptor</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">type_idx</span><span class="p">),</span> <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">types</span><span class="p">))</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+                <span class="n">atomic_number</span><span class="p">,</span> <span class="n">acceptor</span><span class="p">,</span> <span class="n">donor</span><span class="p">,</span> <span class="n">aromatic</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">sp2</span><span class="p">,</span> <span class="n">sp3</span><span class="p">,</span> <span class="n">num_hs</span>
+            <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span><span class="o">.</span><span class="n">t</span><span class="p">()</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x1</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">),</span> <span class="n">x2</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">bond_idx</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+                <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtomIdx</span><span class="p">(),</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtomIdx</span><span class="p">()</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span>
+                <span class="n">col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">end</span><span class="p">,</span> <span class="n">start</span><span class="p">]</span>
+                <span class="n">bond_idx</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bonds</span><span class="p">[</span><span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()]]</span>
+
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+            <span class="n">edge_attr</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">bond_idx</span><span class="p">),</span>
+                                  <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bonds</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span> <span class="o">=</span> <span class="n">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+            <span class="n">y</span> <span class="o">=</span> <span class="n">target</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s1">&#39;_Name&#39;</span><span class="p">)</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span>
+                        <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_attr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_filter</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collate</span><span class="p">(</span><span class="n">data_list</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

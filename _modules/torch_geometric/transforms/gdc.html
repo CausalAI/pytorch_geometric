@@ -1,0 +1,814 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.transforms.gdc &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id1">安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/installation.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/introduction.html">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/introduction.html#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_gnn.html#id2">边卷积层的实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/create_dataset.html">构建数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/create_dataset.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notes/resources.html">相关资料</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>torch_geometric.transforms.gdc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for torch_geometric.transforms.gdc</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">expm</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.utils</span> <span class="k">import</span> <span class="n">add_self_loops</span><span class="p">,</span> <span class="n">is_undirected</span><span class="p">,</span> <span class="n">to_dense_adj</span>
+<span class="kn">from</span> <span class="nn">torch_sparse</span> <span class="k">import</span> <span class="n">coalesce</span>
+<span class="kn">from</span> <span class="nn">torch_scatter</span> <span class="k">import</span> <span class="n">scatter_add</span>
+
+
+<span class="k">def</span> <span class="nf">jit</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numba</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numba</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">decorator</span>
+
+
+<div class="viewcode-block" id="GDC"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC">[docs]</a><span class="k">class</span> <span class="nc">GDC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Processes the graph via Graph Diffusion Convolution (GDC) from the</span>
+<span class="sd">    `&quot;Diffusion Improves Graph Learning&quot; &lt;https://www.kdd.in.tum.de/gdc&gt;`_</span>
+<span class="sd">    paper.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The paper offers additional advice on how to choose the</span>
+<span class="sd">        hyperparameters.</span>
+<span class="sd">        For an example of using GCN with GDC, see `examples/gcn.py</span>
+<span class="sd">        &lt;https://github.com/rusty1s/pytorch_geometric/blob/master/examples/</span>
+<span class="sd">        gcn.py&gt;`_.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        self_loop_weight (float, optional): Weight of the added self-loop.</span>
+<span class="sd">            Set to :obj:`None` to add no self-loops. (default: :obj:`1`)</span>
+<span class="sd">        normalization_in (str, optional): Normalization of the transition</span>
+<span class="sd">            matrix on the original (input) graph. Possible values:</span>
+<span class="sd">            :obj:`&quot;sym&quot;`, :obj:`&quot;col&quot;`, and :obj:`&quot;row&quot;`.</span>
+<span class="sd">            See :func:`GDC.transition_matrix` for details.</span>
+<span class="sd">            (default: :obj:`&quot;sym&quot;`)</span>
+<span class="sd">        normalization_out (str, optional): Normalization of the transition</span>
+<span class="sd">            matrix on the transformed GDC (output) graph. Possible values:</span>
+<span class="sd">            :obj:`&quot;sym&quot;`, :obj:`&quot;col&quot;`, :obj:`&quot;row&quot;`, and :obj:`None`.</span>
+<span class="sd">            See :func:`GDC.transition_matrix` for details.</span>
+<span class="sd">            (default: :obj:`&quot;col&quot;`)</span>
+<span class="sd">        diffusion_kwargs (dict, optional): Dictionary containing the parameters</span>
+<span class="sd">            for diffusion.</span>
+<span class="sd">            `method` specifies the diffusion method (:obj:`&quot;ppr&quot;`,</span>
+<span class="sd">            :obj:`&quot;heat&quot;` or :obj:`&quot;coeff&quot;`).</span>
+<span class="sd">            Each diffusion method requires different additional parameters.</span>
+<span class="sd">            See :func:`GDC.diffusion_matrix_exact` or</span>
+<span class="sd">            :func:`GDC.diffusion_matrix_approx` for details.</span>
+<span class="sd">            (default: :obj:`dict(method=&#39;ppr&#39;, alpha=0.15)`)</span>
+<span class="sd">        sparsification_kwargs (dict, optional): Dictionary containing the</span>
+<span class="sd">            parameters for sparsification.</span>
+<span class="sd">            `method` specifies the sparsification method (:obj:`&quot;threshold&quot;` or</span>
+<span class="sd">            :obj:`&quot;topk&quot;`).</span>
+<span class="sd">            Each sparsification method requires different additional</span>
+<span class="sd">            parameters.</span>
+<span class="sd">            See :func:`GDC.sparsify_dense` for details.</span>
+<span class="sd">            (default: :obj:`dict(method=&#39;threshold&#39;, avg_degree=64)`)</span>
+<span class="sd">        exact (bool, optional): Whether to exactly calculate the diffusion</span>
+<span class="sd">            matrix.</span>
+<span class="sd">            Note that the exact variants are not scalable.</span>
+<span class="sd">            They densify the adjacency matrix and calculate either its inverse</span>
+<span class="sd">            or its matrix exponential.</span>
+<span class="sd">            However, the approximate variants do not support edge weights and</span>
+<span class="sd">            currently only personalized PageRank and sparsification by</span>
+<span class="sd">            threshold are implemented as fast, approximate versions.</span>
+<span class="sd">            (default: :obj:`True`)</span>
+
+<span class="sd">    :rtype: :class:`torch_geometric.data.Data`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">self_loop_weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">normalization_in</span><span class="o">=</span><span class="s1">&#39;sym&#39;</span><span class="p">,</span>
+                 <span class="n">normalization_out</span><span class="o">=</span><span class="s1">&#39;col&#39;</span><span class="p">,</span>
+                 <span class="n">diffusion_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ppr&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">),</span>
+                 <span class="n">sparsification_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;threshold&#39;</span><span class="p">,</span>
+                                            <span class="n">avg_degree</span><span class="o">=</span><span class="mi">64</span><span class="p">),</span> <span class="n">exact</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">self_loop_weight</span> <span class="o">=</span> <span class="n">self_loop_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalization_in</span> <span class="o">=</span> <span class="n">normalization_in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalization_out</span> <span class="o">=</span> <span class="n">normalization_out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diffusion_kwargs</span> <span class="o">=</span> <span class="n">diffusion_kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sparsification_kwargs</span> <span class="o">=</span> <span class="n">sparsification_kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exact</span> <span class="o">=</span> <span class="n">exact</span>
+
+        <span class="k">if</span> <span class="n">self_loop_weight</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">exact</span> <span class="ow">or</span> <span class="n">self_loop_weight</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+        <span class="n">edge_index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">edge_index</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                                     <span class="n">device</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">exact</span>
+            <span class="k">assert</span> <span class="n">edge_weight</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_loop_weight</span><span class="p">:</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">add_self_loops</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">self_loop_weight</span><span class="p">,</span>
+                <span class="n">num_nodes</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exact</span><span class="p">:</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization_in</span><span class="p">)</span>
+            <span class="n">diff_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffusion_matrix_exact</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span>
+                                                   <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">diffusion_kwargs</span><span class="p">)</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparsify_dense</span><span class="p">(</span>
+                <span class="n">diff_mat</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">sparsification_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diffusion_matrix_approx</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization_in</span><span class="p">,</span>
+                <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">diffusion_kwargs</span><span class="p">)</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sparsify_sparse</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">sparsification_kwargs</span><span class="p">)</span>
+
+        <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">(</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization_out</span><span class="p">)</span>
+
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">edge_attr</span> <span class="o">=</span> <span class="n">edge_weight</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="GDC.transition_matrix"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC.transition_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span>
+                          <span class="n">normalization</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the approximate, sparse diffusion on a given sparse</span>
+<span class="sd">        matrix.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            edge_index (LongTensor): The edge indices.</span>
+<span class="sd">            edge_weight (Tensor): One-dimensional edge weights.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            normalization (str): Normalization scheme:</span>
+
+<span class="sd">                1. :obj:`&quot;sym&quot;`: Symmetric normalization</span>
+<span class="sd">                   :math:`\mathbf{T} = \mathbf{D}^{-1/2} \mathbf{A}</span>
+<span class="sd">                   \mathbf{D}^{-1/2}`.</span>
+<span class="sd">                2. :obj:`&quot;col&quot;`: Column-wise normalization</span>
+<span class="sd">                   :math:`\mathbf{T} = \mathbf{A} \mathbf{D}^{-1}`.</span>
+<span class="sd">                3. :obj:`&quot;row&quot;`: Row-wise normalization</span>
+<span class="sd">                   :math:`\mathbf{T} = \mathbf{D}^{-1} \mathbf{A}`.</span>
+<span class="sd">                4. :obj:`None`: No normalization.</span>
+
+<span class="sd">        :rtype: (:class:`LongTensor`, :class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;sym&#39;</span><span class="p">:</span>
+            <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_index</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">scatter_add</span><span class="p">(</span><span class="n">edge_weight</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim_size</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">deg_inv_sqrt</span> <span class="o">=</span> <span class="n">deg</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">deg_inv_sqrt</span><span class="p">[</span><span class="n">deg_inv_sqrt</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">deg_inv_sqrt</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">*</span> <span class="n">edge_weight</span> <span class="o">*</span> <span class="n">deg_inv_sqrt</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;col&#39;</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_index</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">scatter_add</span><span class="p">(</span><span class="n">edge_weight</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim_size</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">deg_inv</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">deg</span>
+            <span class="n">deg_inv</span><span class="p">[</span><span class="n">deg_inv</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">edge_weight</span> <span class="o">*</span> <span class="n">deg_inv</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;row&#39;</span><span class="p">:</span>
+            <span class="n">row</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">edge_index</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">scatter_add</span><span class="p">(</span><span class="n">edge_weight</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim_size</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">deg_inv</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">deg</span>
+            <span class="n">deg_inv</span><span class="p">[</span><span class="n">deg_inv</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">edge_weight</span> <span class="o">*</span> <span class="n">deg_inv</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">normalization</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Transition matrix normalization </span><span class="si">{}</span><span class="s1"> unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">normalization</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span></div>
+
+<div class="viewcode-block" id="GDC.diffusion_matrix_exact"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC.diffusion_matrix_exact">[docs]</a>    <span class="k">def</span> <span class="nf">diffusion_matrix_exact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span>
+                               <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the (dense) diffusion on a given sparse graph.</span>
+<span class="sd">        Note that these exact variants are not scalable. They densify the</span>
+<span class="sd">        adjacency matrix and calculate either its inverse or its matrix</span>
+<span class="sd">        exponential.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            edge_index (LongTensor): The edge indices.</span>
+<span class="sd">            edge_weight (Tensor): One-dimensional edge weights.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            method (str): Diffusion method:</span>
+
+<span class="sd">                1. :obj:`&quot;ppr&quot;`: Use personalized PageRank as diffusion.</span>
+<span class="sd">                   Additionally expects the parameter:</span>
+
+<span class="sd">                   - **alpha** (*float*) - Return probability in PPR.</span>
+<span class="sd">                     Commonly lies in :obj:`[0.05, 0.2]`.</span>
+
+<span class="sd">                2. :obj:`&quot;heat&quot;`: Use heat kernel diffusion.</span>
+<span class="sd">                   Additionally expects the parameter:</span>
+
+<span class="sd">                   - **t** (*float*) - Time of diffusion. Commonly lies in</span>
+<span class="sd">                     :obj:`[2, 10]`.</span>
+
+<span class="sd">                3. :obj:`&quot;coeff&quot;`: Freely choose diffusion coefficients.</span>
+<span class="sd">                   Additionally expects the parameter:</span>
+
+<span class="sd">                   - **coeffs** (*List[float]*) - List of coefficients</span>
+<span class="sd">                     :obj:`theta_k` for each power of the transition matrix</span>
+<span class="sd">                     (starting at :obj:`0`).</span>
+
+<span class="sd">        :rtype: (:class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ppr&#39;</span><span class="p">:</span>
+            <span class="c1"># α (I_n + (α - 1) A)^-1</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">edge_weight</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">add_self_loops</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span>
+                                                     <span class="n">fill_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                     <span class="n">num_nodes</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">to_dense_adj</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">diff_matrix</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;heat&#39;</span><span class="p">:</span>
+            <span class="c1"># exp(t (A - I_n))</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">add_self_loops</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span>
+                                                     <span class="n">fill_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                                     <span class="n">num_nodes</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">edge_weight</span>
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">to_dense_adj</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">undirected</span> <span class="o">=</span> <span class="n">is_undirected</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">)</span>
+            <span class="n">diff_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__expm__</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">undirected</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;coeff&#39;</span><span class="p">:</span>
+            <span class="n">adj_matrix</span> <span class="o">=</span> <span class="n">to_dense_adj</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span>
+                                      <span class="n">edge_attr</span><span class="o">=</span><span class="n">edge_weight</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="n">diff_matrix</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;coeffs&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">mat</span>
+            <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;coeffs&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span> <span class="o">@</span> <span class="n">adj_matrix</span>
+                <span class="n">diff_matrix</span> <span class="o">+=</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">mat</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Exact GDC diffusion </span><span class="si">{}</span><span class="s1"> unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">diff_matrix</span></div>
+
+<div class="viewcode-block" id="GDC.diffusion_matrix_approx"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC.diffusion_matrix_approx">[docs]</a>    <span class="k">def</span> <span class="nf">diffusion_matrix_approx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span>
+                                <span class="n">normalization</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the approximate, sparse diffusion on a given sparse</span>
+<span class="sd">        graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            edge_index (LongTensor): The edge indices.</span>
+<span class="sd">            edge_weight (Tensor): One-dimensional edge weights.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            normalization (str): Transition matrix normalization scheme</span>
+<span class="sd">                (:obj:`&quot;sym&quot;`, :obj:`&quot;row&quot;`, or :obj:`&quot;col&quot;`).</span>
+<span class="sd">                See :func:`GDC.transition_matrix` for details.</span>
+<span class="sd">            method (str): Diffusion method:</span>
+
+<span class="sd">                1. :obj:`&quot;ppr&quot;`: Use personalized PageRank as diffusion.</span>
+<span class="sd">                   Additionally expects the parameters:</span>
+
+<span class="sd">                   - **alpha** (*float*) - Return probability in PPR.</span>
+<span class="sd">                     Commonly lies in :obj:`[0.05, 0.2]`.</span>
+
+<span class="sd">                   - **eps** (*float*) - Threshold for PPR calculation stopping</span>
+<span class="sd">                     criterion (:obj:`edge_weight &gt;= eps * out_degree`).</span>
+<span class="sd">                     Recommended default: :obj:`1e-4`.</span>
+
+<span class="sd">        :rtype: (:class:`LongTensor`, :class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ppr&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;sym&#39;</span><span class="p">:</span>
+                <span class="c1"># Calculate original degrees.</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_index</span>
+                <span class="n">deg</span> <span class="o">=</span> <span class="n">scatter_add</span><span class="p">(</span><span class="n">edge_weight</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dim_size</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+
+            <span class="n">edge_index_np</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="c1"># Assumes coalesced edge_index.</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">indptr</span><span class="p">,</span> <span class="n">out_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edge_index_np</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                              <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                              <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">neighbors</span><span class="p">,</span> <span class="n">neighbor_weights</span> <span class="o">=</span> <span class="n">GDC</span><span class="o">.</span><span class="n">__calc_ppr__</span><span class="p">(</span>
+                <span class="n">indptr</span><span class="p">,</span> <span class="n">edge_index_np</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">out_degree</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">],</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">])</span>
+            <span class="n">ppr_normalization</span> <span class="o">=</span> <span class="s1">&#39;col&#39;</span> <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;col&#39;</span> <span class="k">else</span> <span class="s1">&#39;row&#39;</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors_to_graph__</span><span class="p">(</span>
+                <span class="n">neighbors</span><span class="p">,</span> <span class="n">neighbor_weights</span><span class="p">,</span> <span class="n">ppr_normalization</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;sym&#39;</span><span class="p">:</span>
+                <span class="c1"># We can change the normalization from row-normalized to</span>
+                <span class="c1"># symmetric by multiplying the resulting matrix with D^{1/2}</span>
+                <span class="c1"># from the left and D^{-1/2} from the right.</span>
+                <span class="c1"># Since we use the original degrees for this it will be like</span>
+                <span class="c1"># we had used symmetric normalization from the beginning</span>
+                <span class="c1"># (except for errors due to approximation).</span>
+                <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_index</span>
+                <span class="n">deg_inv</span> <span class="o">=</span> <span class="n">deg</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+                <span class="n">deg_inv_sqrt</span> <span class="o">=</span> <span class="n">deg</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+                <span class="n">deg_inv_sqrt</span><span class="p">[</span><span class="n">deg_inv_sqrt</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">deg_inv</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">*</span> <span class="n">edge_weight</span> <span class="o">*</span> <span class="n">deg_inv_sqrt</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">normalization</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;col&#39;</span><span class="p">,</span> <span class="s1">&#39;row&#39;</span><span class="p">]:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="p">(</span><span class="s1">&#39;Transition matrix normalization </span><span class="si">{}</span><span class="s1"> not implemented for &#39;</span>
+                     <span class="s1">&#39;non-exact GDC computation.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">normalization</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;heat&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="p">(</span><span class="s1">&#39;Currently no fast heat kernel is implemented. You are &#39;</span>
+                 <span class="s1">&#39;welcome to create one yourself, e.g., based on &#39;</span>
+                 <span class="s1">&#39;&quot;Kloster and Gleich: Heat kernel based community detection &#39;</span>
+                 <span class="s1">&#39;(KDD 2014).&quot;&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Approximate GDC diffusion </span><span class="si">{}</span><span class="s1"> unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span></div>
+
+<div class="viewcode-block" id="GDC.sparsify_dense"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC.sparsify_dense">[docs]</a>    <span class="k">def</span> <span class="nf">sparsify_dense</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sparsifies the given dense matrix.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            matrix (Tensor): Matrix to sparsify.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            method (str): Method of sparsification. Options:</span>
+
+<span class="sd">                1. :obj:`&quot;threshold&quot;`: Remove all edges with weights smaller</span>
+<span class="sd">                   than :obj:`eps`.</span>
+<span class="sd">                   Additionally expects one of these parameters:</span>
+
+<span class="sd">                   - **eps** (*float*) - Threshold to bound edges at.</span>
+
+<span class="sd">                   - **avg_degree** (*int*) - If :obj:`eps` is not given,</span>
+<span class="sd">                     it can optionally be calculated by calculating the</span>
+<span class="sd">                     :obj:`eps` required to achieve a given :obj:`avg_degree`.</span>
+
+<span class="sd">                2. :obj:`&quot;topk&quot;`: Keep edges with top :obj:`k` edge weights per</span>
+<span class="sd">                   node (column).</span>
+<span class="sd">                   Additionally expects the following parameters:</span>
+
+<span class="sd">                   - **k** (*int*) - Specifies the number of edges to keep.</span>
+
+<span class="sd">                   - **dim** (*int*) - The axis along which to take the top</span>
+<span class="sd">                     :obj:`k`.</span>
+
+<span class="sd">        :rtype: (:class:`LongTensor`, :class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;threshold&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;eps&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_eps__</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span>
+                                                       <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;avg_degree&#39;</span><span class="p">])</span>
+
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">matrix</span> <span class="o">&gt;=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+            <span class="n">edge_index_flat</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">edge_index_flat</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;topk&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">],</span>
+                                     <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">top_idx</span> <span class="o">=</span> <span class="n">sort_idx</span><span class="p">[:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]]</span>
+                <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">],</span>
+                                           <span class="n">index</span><span class="o">=</span><span class="n">top_idx</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+                <span class="n">row_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">matrix</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span>
+                <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">top_idx</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">row_idx</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">top_idx</span> <span class="o">=</span> <span class="n">sort_idx</span><span class="p">[:,</span> <span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]]</span>
+                <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">],</span>
+                                           <span class="n">index</span><span class="o">=</span><span class="n">top_idx</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+                <span class="n">col_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                    <span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">matrix</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span>
+                <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">col_idx</span><span class="p">,</span> <span class="n">top_idx</span><span class="o">.</span><span class="n">flatten</span><span class="p">()],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;GDC sparsification </span><span class="si">{}</span><span class="s1"> unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span></div>
+
+<div class="viewcode-block" id="GDC.sparsify_sparse"><a class="viewcode-back" href="../../../modules/transforms.html#torch_geometric.transforms.GDC.sparsify_sparse">[docs]</a>    <span class="k">def</span> <span class="nf">sparsify_sparse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sparsifies a given sparse graph further.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            edge_index (LongTensor): The edge indices.</span>
+<span class="sd">            edge_weight (Tensor): One-dimensional edge weights.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            method (str): Method of sparsification:</span>
+
+<span class="sd">                1. :obj:`&quot;threshold&quot;`: Remove all edges with weights smaller</span>
+<span class="sd">                   than :obj:`eps`.</span>
+<span class="sd">                   Additionally expects one of these parameters:</span>
+
+<span class="sd">                   - **eps** (*float*) - Threshold to bound edges at.</span>
+
+<span class="sd">                   - **avg_degree** (*int*) - If :obj:`eps` is not given,</span>
+<span class="sd">                     it can optionally be calculated by calculating the</span>
+<span class="sd">                     :obj:`eps` required to achieve a given :obj:`avg_degree`.</span>
+
+<span class="sd">        :rtype: (:class:`LongTensor`, :class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;threshold&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;eps&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calculate_eps__</span><span class="p">(</span><span class="n">edge_weight</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span>
+                                                       <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;avg_degree&#39;</span><span class="p">])</span>
+
+            <span class="n">remaining_edge_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span>
+                <span class="n">edge_weight</span> <span class="o">&gt;=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[:,</span> <span class="n">remaining_edge_idx</span><span class="p">]</span>
+            <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">edge_weight</span><span class="p">[</span><span class="n">remaining_edge_idx</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;topk&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s1">&#39;Sparse topk sparsification not implemented.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;GDC sparsification </span><span class="si">{}</span><span class="s1"> unknown.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span></div>
+
+    <span class="k">def</span> <span class="nf">__expm__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">symmetric</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates matrix exponential.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            matrix (Tensor): Matrix to take exponential of.</span>
+<span class="sd">            symmetric (bool): Specifies whether the matrix is symmetric.</span>
+
+<span class="sd">        :rtype: (:class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">symmetric</span><span class="p">:</span>
+            <span class="n">e</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">symeig</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">eigenvectors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">diff_mat</span> <span class="o">=</span> <span class="n">V</span> <span class="o">@</span> <span class="n">torch</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exp</span><span class="p">())</span> <span class="o">@</span> <span class="n">V</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diff_mat_np</span> <span class="o">=</span> <span class="n">expm</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+            <span class="n">diff_mat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">diff_mat_np</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">diff_mat</span>
+
+    <span class="k">def</span> <span class="nf">__calculate_eps__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">avg_degree</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates threshold necessary to achieve a given average degree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            matrix (Tensor): Adjacency matrix or edge weights.</span>
+<span class="sd">            num_nodes (int): Number of nodes.</span>
+<span class="sd">            avg_degree (int): Target average degree.</span>
+
+<span class="sd">        :rtype: (:class:`float`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sorted_edges</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">avg_degree</span> <span class="o">*</span> <span class="n">num_nodes</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sorted_edges</span><span class="p">):</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="n">sorted_edges</span><span class="p">[</span><span class="n">avg_degree</span> <span class="o">*</span> <span class="n">num_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">sorted_edges</span><span class="p">[</span><span class="n">avg_degree</span> <span class="o">*</span> <span class="n">num_nodes</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+    <span class="k">def</span> <span class="nf">__neighbors_to_graph__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">neighbor_weights</span><span class="p">,</span>
+                               <span class="n">normalization</span><span class="o">=</span><span class="s1">&#39;row&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Combine a list of neighbors and neighbor weights to create a sparse</span>
+<span class="sd">        graph.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            neighbors (List[List[int]]): List of neighbors for each node.</span>
+<span class="sd">            neighbor_weights (List[List[float]]): List of weights for the</span>
+<span class="sd">                neighbors of each node.</span>
+<span class="sd">            normalization (str): Normalization of resulting matrix</span>
+<span class="sd">                (options: :obj:`&quot;row&quot;`, :obj:`&quot;col&quot;`). (default: :obj:`&quot;row&quot;`)</span>
+<span class="sd">            device (torch.device): Device to create output tensors on.</span>
+<span class="sd">                (default: :obj:`&quot;cpu&quot;`)</span>
+
+<span class="sd">        :rtype: (:class:`LongTensor`, :class:`Tensor`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">neighbor_weights</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)),</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">))</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;col&#39;</span><span class="p">:</span>
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
+            <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span> <span class="o">=</span> <span class="n">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">normalization</span> <span class="o">==</span> <span class="s1">&#39;row&#39;</span><span class="p">:</span>
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;PPR matrix normalization </span><span class="si">{normalization}</span><span class="s2"> unknown.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_weight</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@jit</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__calc_ppr__</span><span class="p">(</span><span class="n">indptr</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">out_degree</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the personalized PageRank vector for all nodes</span>
+<span class="sd">        using a variant of the Andersen algorithm</span>
+<span class="sd">        (see Andersen et al. :Local Graph Partitioning using PageRank Vectors.)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            indptr (np.ndarray): Index pointer for the sparse matrix</span>
+<span class="sd">                (CSR-format).</span>
+<span class="sd">            indices (np.ndarray): Indices of the sparse matrix entries</span>
+<span class="sd">                (CSR-format).</span>
+<span class="sd">            out_degree (np.ndarray): Out-degree of each node.</span>
+<span class="sd">            alpha (float): Alpha of the PageRank to calculate.</span>
+<span class="sd">            eps (float): Threshold for PPR calculation stopping criterion</span>
+<span class="sd">                (:obj:`edge_weight &gt;= eps * out_degree`).</span>
+
+<span class="sd">        :rtype: (:class:`List[List[int]]`, :class:`List[List[float]]`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alpha_eps</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">eps</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">inode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out_degree</span><span class="p">)):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="n">inode</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">r</span><span class="p">[</span><span class="n">inode</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="n">inode</span><span class="p">]</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">unode</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+                <span class="n">res</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">unode</span><span class="p">]</span> <span class="k">if</span> <span class="n">unode</span> <span class="ow">in</span> <span class="n">r</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">unode</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">p</span><span class="p">[</span><span class="n">unode</span><span class="p">]</span> <span class="o">+=</span> <span class="n">res</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">p</span><span class="p">[</span><span class="n">unode</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
+                <span class="n">r</span><span class="p">[</span><span class="n">unode</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">vnode</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[</span><span class="n">indptr</span><span class="p">[</span><span class="n">unode</span><span class="p">]:</span><span class="n">indptr</span><span class="p">[</span><span class="n">unode</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]:</span>
+                    <span class="n">_val</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">res</span> <span class="o">/</span> <span class="n">out_degree</span><span class="p">[</span><span class="n">unode</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">vnode</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="n">r</span><span class="p">[</span><span class="n">vnode</span><span class="p">]</span> <span class="o">+=</span> <span class="n">_val</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">r</span><span class="p">[</span><span class="n">vnode</span><span class="p">]</span> <span class="o">=</span> <span class="n">_val</span>
+
+                    <span class="n">res_vnode</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">vnode</span><span class="p">]</span> <span class="k">if</span> <span class="n">vnode</span> <span class="ow">in</span> <span class="n">r</span> <span class="k">else</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="n">res_vnode</span> <span class="o">&gt;=</span> <span class="n">alpha_eps</span> <span class="o">*</span> <span class="n">out_degree</span><span class="p">[</span><span class="n">vnode</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">vnode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">q</span><span class="p">:</span>
+                            <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vnode</span><span class="p">)</span>
+            <span class="n">js</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">js</span><span class="p">,</span> <span class="n">vals</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">()&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

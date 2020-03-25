@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Advanced Mini-Batching &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="相关资料" href="resources.html" />
+    <link rel="prev" title="构建数据集" href="create_dataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">PyG安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#id1">安装步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">PyG中基本概念</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id1">图数据类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id2">基准数据集</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">图网络端对端例子</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#id2">边卷积层的实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_dataset.html">构建数据集</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#id2">常见问题集</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">相关资料</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/01-quick_survey.html">PyG 的快速调研</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#资料">资料</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#综述理解">综述理解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#课程内容">课程内容</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Advanced Mini-Batching</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/notes/batching.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="advanced-mini-batching">
+<h1>Advanced Mini-Batching<a class="headerlink" href="#advanced-mini-batching" title="Permalink to this headline">¶</a></h1>
+<p>The creation of mini-batching 对于让深度学习模型的训练能够扩展到 huge amounts of data 至关重要。 Instead of processing examples one-by-one, a mini-batch groups a set of examples into a unified representation where it can efficiently be processed in parallel. 在图像或语言域中, this procedure is typically achieved by rescaling or padding each example into a set to equally-sized shapes, and examples are then grouped in an additional dimension.
+The length of this dimension is then equal to the number of examples grouped in a mini-batch and is typically referred to as the <code class="xref py py-obj docutils literal notranslate"><span class="pre">batch_size</span></code>.</p>
+<p>Since graphs are one of the most general data structures that can hold <em>any</em> number of nodes or edges, 上述两种方法要么不可行，要么可能导致大量不必要的内存消耗。在PyTorch Geometric中，我们选择了另一种方法来实现 parallelization across a number of examples. 在这里，邻接矩阵以对角线形式堆叠 (creating a giant graph that holds multiple isolated subgraphs), and node and target features are simply concatenated in the node dimension, <em>i.e.</em></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{A} = \begin{bmatrix} \mathbf{A}_1 &amp; &amp; \\ &amp; \ddots &amp; \\ &amp; &amp; \mathbf{A}_n \end{bmatrix}, \qquad \mathbf{X} = \begin{bmatrix} \mathbf{X}_1 \\ \vdots \\ \mathbf{X}_n \end{bmatrix}, \qquad \mathbf{Y} = \begin{bmatrix} \mathbf{Y}_1 \\ \vdots \\ \mathbf{Y}_n \end{bmatrix}.\end{split}\]</div>
+<p>与其他批处理过程相比，此过程具有一些关键优势：</p>
+<ol class="arabic simple">
+<li><p>GNN operators that rely on a message passing scheme do not need to be modified since messages still cannot be exchanged between two nodes that belong to different graphs.</p></li>
+<li><p>There is no computational or memory overhead.
+For example, this batching procedure works completely without any padding of node or edge features.
+Note that there is no additional memory overhead for adjacency matrices since they are saved in a sparse fashion holding only non-zero entries, <em>i.e.</em>, the edges.</p></li>
+</ol>
+<p>PyTorch Geometric automatically takes care of batching multiple graphs into a single giant graph with the help of the <a class="reference internal" href="../modules/data.html#torch_geometric.data.DataLoader" title="torch_geometric.data.DataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.DataLoader</span></code></a> class.
+Internally, <a class="reference internal" href="../modules/data.html#torch_geometric.data.DataLoader" title="torch_geometric.data.DataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.DataLoader</span></code></a> is just a regular PyTorch <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> that overwrites its <code class="xref py py-func docutils literal notranslate"><span class="pre">collate()</span></code> functionality, <em>i.e.</em>, the definition of how a list of examples should be grouped together.
+Therefore, all arguments that can be passed to a PyTorch <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> can also be passed to a PyTorch Geometric <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code>, <em>e.g.</em>, the number of workers <code class="xref py py-obj docutils literal notranslate"><span class="pre">num_workers</span></code>.</p>
+<p>In its most general form, the PyTorch Geometric <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> will automatically increment the <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> tensor by the cumulated number of nodes of graphs that got collated before the currently processed graph, and will concatenate <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> tensors (that are of shape <code class="xref py py-obj docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">num_edges]</span></code>) in the second dimension.
+The same is true for <code class="xref py py-obj docutils literal notranslate"><span class="pre">face</span></code> tensors.
+All other tensors will just get concatenated in the first dimension without any further increasement of their values.</p>
+<p>However, there are a few special use-cases (as outlined below) where the user actively wants to modify this behaviour to its own needs.
+PyTorch Geometric allows modification to the underlying batching procedure by overwriting the <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data.__inc__" title="torch_geometric.data.Data.__inc__"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch_geometric.data.Data.__inc__()</span></code></a> and <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data.__cat_dim__" title="torch_geometric.data.Data.__cat_dim__"><code class="xref py py-func docutils literal notranslate"><span class="pre">torch_geometric.data.Data.__cat_dim__()</span></code></a> functionalities.
+Without any modifications, these are defined as follows in the <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__inc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">or</span> <span class="s1">&#39;face&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">__cat_dim__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">or</span> <span class="s1">&#39;face&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>We can see that <code class="xref py py-meth docutils literal notranslate"><span class="pre">__inc__()</span></code> defines the incremental count between two consecutive graph attributes, where as <code class="xref py py-meth docutils literal notranslate"><span class="pre">__cat_dim__()</span></code> defines in which dimension graph tensors of the same attribute should be concatenated together.
+Both functions are called for each attribute stored in the <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> class, and get passed their specific <code class="xref py py-obj docutils literal notranslate"><span class="pre">key</span></code> and value <code class="xref py py-obj docutils literal notranslate"><span class="pre">item</span></code> as arguments.</p>
+<p>In what follows, we present a few use-cases where the modification of <code class="xref py py-func docutils literal notranslate"><span class="pre">__inc__()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">__cat_dim__()</span></code> might be absolutely necessary.</p>
+<div class="section" id="pairs-of-graphs">
+<h2>Pairs of Graphs<a class="headerlink" href="#pairs-of-graphs" title="Permalink to this headline">¶</a></h2>
+<p>In case you want to store multiple graphs in a single <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object, <em>e.g.</em>, for applications such as graph matching, you need to ensure correct batching behaviour across all those graphs.
+For example, consider storing two graphs, a source graph <span class="math notranslate nohighlight">\(\mathcal{G}_s\)</span> and a target graph <span class="math notranslate nohighlight">\(\mathcal{G}_t\)</span> in a <a class="reference internal" href="../modules/data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a>, <em>e.g.</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PairData</span><span class="p">(</span><span class="n">Data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index_s</span><span class="p">,</span> <span class="n">x_s</span><span class="p">,</span> <span class="n">edge_index_t</span><span class="p">,</span> <span class="n">x_t</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PairData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_index_s</span> <span class="o">=</span> <span class="n">edge_index_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_s</span> <span class="o">=</span> <span class="n">x_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_index_t</span> <span class="o">=</span> <span class="n">edge_index_t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_t</span> <span class="o">=</span> <span class="n">x_t</span>
+</pre></div>
+</div>
+<p>In this case, <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index_s</span></code> should be increased by the number of nodes in the source graph <span class="math notranslate nohighlight">\(\mathcal{G}_s\)</span>, <em>e.g.</em>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_s.size(0)</span></code>, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index_t</span></code> should be increased by the number of nodes in the target graph <span class="math notranslate nohighlight">\(\mathcal{G}_t\)</span>, <em>e.g.</em>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_t.size(0)</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__inc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;edge_index_s&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_s</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;edge_index_t&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_t</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PairData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__inc__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can test our <code class="xref py py-class docutils literal notranslate"><span class="pre">PairData</span></code> batching behaviour by setting up a simple test script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_index_s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="p">])</span>
+<span class="n">x_s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 5 nodes.</span>
+<span class="n">edge_index_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">])</span>
+<span class="n">x_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 4 nodes.</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">PairData</span><span class="p">(</span><span class="n">edge_index_s</span><span class="p">,</span> <span class="n">x_s</span><span class="p">,</span> <span class="n">edge_index_t</span><span class="p">,</span> <span class="n">x_t</span><span class="p">)</span>
+<span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Batch</span><span class="p">(</span><span class="n">edge_index_s</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">x_s</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+          <span class="n">edge_index_t</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">x_t</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">edge_index_s</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">edge_index_t</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Everything looks good so far!
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index_s</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index_t</span></code> get correctly batched together, even when using different numbers of nodes for <span class="math notranslate nohighlight">\(\mathcal{G}_s\)</span> and <span class="math notranslate nohighlight">\(\mathcal{G}_t\)</span>.
+However, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">batch</span></code> attribute (that maps each node to its respective graph) is missing since PyTorch Geometric fails to identify the actual graph in the <code class="xref py py-class docutils literal notranslate"><span class="pre">PairData</span></code> object.
+That’s where the <code class="xref py py-obj docutils literal notranslate"><span class="pre">follow_batch</span></code> argument of the <a class="reference internal" href="../modules/data.html#torch_geometric.data.DataLoader" title="torch_geometric.data.DataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.DataLoader</span></code></a> comes into play.
+Here, we can specify for which attributes we want to maintain the batch information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">follow_batch</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x_s&#39;</span><span class="p">,</span> <span class="s1">&#39;x_t&#39;</span><span class="p">])</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Batch</span><span class="p">(</span><span class="n">edge_index_s</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">x_s</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">x_s_batch</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+          <span class="n">edge_index_t</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">x_t</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">x_t_batch</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">x_s_batch</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">x_t_batch</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>As one can see, <code class="xref py py-obj docutils literal notranslate"><span class="pre">follow_batch=['x_s',</span> <span class="pre">'x_t']</span></code> now successfully creates assignment vectors called <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_s_batch</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_t_batch</span></code> for the node features <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_s</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_t</span></code>, respectively.
+That information can now be used to perform reduce operations, <em>e.g.</em>, global pooling, on multiple graphs in a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code> object.</p>
+</div>
+<div class="section" id="bipartite-graphs">
+<h2>Bipartite Graphs<a class="headerlink" href="#bipartite-graphs" title="Permalink to this headline">¶</a></h2>
+<p>The adjacency matrix of a bipartite graph defines the relationship between nodes of two different node types.
+In general, the number of nodes for each node type do not need to match, resulting in a non-quadratic adjacency matrix of shape <span class="math notranslate nohighlight">\(\mathbf{A} \in \{ 0, 1 \}^{N \times M}\)</span> with <span class="math notranslate nohighlight">\(N \neq M\)</span> potentially.
+In a mini-batching procedure of bipartite graphs, the source nodes of edges in <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> should get increased differently than the target nodes of edges in <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code>.
+To achieve this, consider a bipartite graph between two node types with corresponding node features <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_s</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_t</span></code>, respectively:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BipartiteData</span><span class="p">(</span><span class="n">Data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">x_s</span><span class="p">,</span> <span class="n">x_t</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BipartiteData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_s</span> <span class="o">=</span> <span class="n">x_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_t</span> <span class="o">=</span> <span class="n">x_t</span>
+</pre></div>
+</div>
+<p>For a correct mini-batching procedure in bipartite graphs, we need to tell PyTorch Geometric that it should increment source and target nodes of edges in <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> independently on each other:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__inc__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;edge_index&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_s</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_t</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">BipartiteData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__inc__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index[0]</span></code> (the source nodes of edges) get incremented by <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_s.size(0)</span></code> while <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index[1]</span></code> (the target nodes of edges) get incremented by <code class="xref py py-obj docutils literal notranslate"><span class="pre">x_t.size(0)</span></code>.
+We can again test our implementation by running a simple test script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="p">])</span>
+<span class="n">x_s</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 2 nodes.</span>
+<span class="n">x_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>  <span class="c1"># 3 nodes.</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">BipartiteData</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x_s</span><span class="p">,</span> <span class="n">x_t</span><span class="p">)</span>
+<span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">data_list</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Batch</span><span class="p">(</span><span class="n">edge_index</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">x_s</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">x_t</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">edge_index</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>Again, this is exactly the behaviour we aimed for!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="resources.html" class="btn btn-neutral float-right" title="相关资料" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="create_dataset.html" class="btn btn-neutral float-left" title="构建数据集" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1212 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.utils &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torch_geometric.io" href="io.html" />
+    <link rel="prev" title="torch_geometric.transforms" href="transforms.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#id1">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/introduction.html">Introduction by Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#data-handling-of-graphs">Data Handling of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#common-benchmark-datasets">Common Benchmark Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#learning-methods-on-graphs">Learning Methods on Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/create_gnn.html">Creating Message Passing Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#the-messagepassing-base-class">The “MessagePassing” Base Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#implementing-the-gcn-layer">Implementing the GCN Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#implementing-the-edge-convolution">Implementing the Edge Convolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/create_dataset.html">Creating Your Own Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/resources.html">External Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/01-quick_survey.html">PyG 的快速调研</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">torch_geometric.data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torch_geometric.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-torch_geometric.utils">
+<span id="torch-geometric-utils"></span><h1>torch_geometric.utils<a class="headerlink" href="#module-torch_geometric.utils" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="torch_geometric.utils.degree">
+<code class="sig-name descname">degree</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">num_nodes=None</em>, <em class="sig-param">dtype=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/degree.html#degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the (unweighted) degree of a given one-dimensional index
+tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>LongTensor</em>) – Index tensor.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>dtype</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.dtype</span></code>, optional) – The desired data type of the
+returned tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.scatter_">
+<code class="sig-name descname">scatter_</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">src</em>, <em class="sig-param">index</em>, <em class="sig-param">dim=0</em>, <em class="sig-param">dim_size=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/scatter.html#scatter_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.scatter_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregates all values from the <code class="xref py py-attr docutils literal notranslate"><span class="pre">src</span></code> tensor at the indices
+specified in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">index</span></code> tensor along the first dimension.
+If multiple indices reference the same location, their contributions
+are aggregated according to <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code> (either <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;add&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – The aggregation to use (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;add&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>).</p></li>
+<li><p><strong>src</strong> (<em>Tensor</em>) – The source tensor.</p></li>
+<li><p><strong>index</strong> (<em>LongTensor</em>) – The indices of elements to scatter.</p></li>
+<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The axis along which to index. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+<li><p><strong>dim_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Automatically create output tensor with size
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">dim_size</span></code> in the first dimension. If set to <code class="xref py py-attr docutils literal notranslate"><span class="pre">None</span></code>, a
+minimal sized output tensor is returned. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.softmax">
+<code class="sig-name descname">softmax</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">index</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/softmax.html#softmax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.softmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a sparsely evaluated softmax.
+Given a value tensor <code class="xref py py-attr docutils literal notranslate"><span class="pre">src</span></code>, this function first groups the values
+along the first dimension based on the indices specified in <code class="xref py py-attr docutils literal notranslate"><span class="pre">index</span></code>,
+and then proceeds to compute the softmax individually for each group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>Tensor</em>) – The source tensor.</p></li>
+<li><p><strong>index</strong> (<em>LongTensor</em>) – The indices of elements for applying the softmax.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.dropout_adj">
+<code class="sig-name descname">dropout_adj</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">p=0.5</em>, <em class="sig-param">force_undirected=False</em>, <em class="sig-param">num_nodes=None</em>, <em class="sig-param">training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/dropout.html#dropout_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.dropout_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly drops edges from the adjacency matrix
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">(edge_index,</span> <span class="pre">edge_attr)</span></code> with probability <code class="xref py py-obj docutils literal notranslate"><span class="pre">p</span></code> using samples from
+a Bernoulli distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Dropout probability. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">0.5</span></code>)</p></li>
+<li><p><strong>force_undirected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, will either
+drop or keep both edges of an undirected edge.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>training</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>, this operation is a
+no-op. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.sort_edge_index">
+<code class="sig-name descname">sort_edge_index</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/sort_edge_index.html#sort_edge_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.sort_edge_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Row-wise sorts edge indices <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.is_undirected">
+<code class="sig-name descname">is_undirected</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/undirected.html#is_undirected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.is_undirected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> if the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code> is
+undirected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_undirected">
+<code class="sig-name descname">to_undirected</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/undirected.html#to_undirected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_undirected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code> to an undirected graph,
+so that <span class="math notranslate nohighlight">\((j,i) \in \mathcal{E}\)</span> for every edge <span class="math notranslate nohighlight">\((i,j) \in
+\mathcal{E}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.contains_self_loops">
+<code class="sig-name descname">contains_self_loops</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/loop.html#contains_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.contains_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> if the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code> contains
+self-loops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.remove_self_loops">
+<code class="sig-name descname">remove_self_loops</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/loop.html#remove_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.remove_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes every self-loop in the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>, so
+that <span class="math notranslate nohighlight">\((i,i) \not\in \mathcal{E}\)</span> for every <span class="math notranslate nohighlight">\(i \in \mathcal{V}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.segregate_self_loops">
+<code class="sig-name descname">segregate_self_loops</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/loop.html#segregate_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.segregate_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segregates self-loops from the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.add_self_loops">
+<code class="sig-name descname">add_self_loops</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_weight=None</em>, <em class="sig-param">fill_value=1</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/loop.html#add_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.add_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a self-loop <span class="math notranslate nohighlight">\((i,i) \in \mathcal{E}\)</span> to every node
+<span class="math notranslate nohighlight">\(i \in \mathcal{V}\)</span> in the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>.
+In case the graph is weighted, self-loops will be added with edge weights
+denoted by <code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_value</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_weight</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – One-dimensional edge weights.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>fill_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_weight</span></code> is not <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>,
+will add self-loops with edge weights of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_value</span></code> to the
+graph. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.add_remaining_self_loops">
+<code class="sig-name descname">add_remaining_self_loops</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_weight=None</em>, <em class="sig-param">fill_value=1</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/loop.html#add_remaining_self_loops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.add_remaining_self_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds remaining self-loop <span class="math notranslate nohighlight">\((i,i) \in \mathcal{E}\)</span> to every node
+<span class="math notranslate nohighlight">\(i \in \mathcal{V}\)</span> in the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>.
+In case the graph is weighted and already contains a few self-loops, only
+non-existent self-loops will be added with edge weights denoted by
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_value</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_weight</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – One-dimensional edge weights.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>fill_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_weight</span></code> is not <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>,
+will add self-loops with edge weights of <code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_value</span></code> to the
+graph. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">1</span></code>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.contains_isolated_nodes">
+<code class="sig-name descname">contains_isolated_nodes</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/isolated.html#contains_isolated_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.contains_isolated_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> if the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code> contains
+isolated nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.remove_isolated_nodes">
+<code class="sig-name descname">remove_isolated_nodes</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/isolated.html#remove_isolated_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.remove_isolated_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the isolated nodes from the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>
+with optional edge attributes <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_attr</span></code>.
+In addition, returns a mask of shape <code class="xref py py-obj docutils literal notranslate"><span class="pre">[num_nodes]</span></code> to manually filter
+out isolated node features later on.
+Self-loops are preserved for non-isolated nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(LongTensor, Tensor, BoolTensor)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.subgraph">
+<code class="sig-name descname">subgraph</code><span class="sig-paren">(</span><em class="sig-param">subset</em>, <em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">relabel_nodes=False</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/subgraph.html#subgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the induced subgraph of <code class="xref py py-obj docutils literal notranslate"><span class="pre">(edge_index,</span> <span class="pre">edge_attr)</span></code>
+containing the nodes in <code class="xref py py-obj docutils literal notranslate"><span class="pre">subset</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subset</strong> (<em>LongTensor</em><em>, </em><em>BoolTensor</em><em> or </em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>]</em>) – The nodes to keep.</p></li>
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>relabel_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the resulting
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> will be relabeled to hold consecutive indices
+starting from zero. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.get_laplacian">
+<code class="sig-name descname">get_laplacian</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_weight=None</em>, <em class="sig-param">normalization=None</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/get_laplacian.html#get_laplacian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.get_laplacian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the graph Laplacian of the graph given by <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code>
+and optional <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_weight</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_weight</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – One-dimensional edge weights.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>normalization</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>The normalization scheme for the graph
+Laplacian (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>):</p>
+<p>1. <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>: No normalization
+<span class="math notranslate nohighlight">\(\mathbf{L} = \mathbf{D} - \mathbf{A}\)</span></p>
+<p>2. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;sym&quot;</span></code>: Symmetric normalization
+<span class="math notranslate nohighlight">\(\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{A}
+\mathbf{D}^{-1/2}\)</span></p>
+<p>3. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;rw&quot;</span></code>: Random-walk normalization
+<span class="math notranslate nohighlight">\(\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1} \mathbf{A}\)</span></p>
+</p></li>
+<li><p><strong>dtype</strong> (<em>torch.dtype</em><em>, </em><em>optional</em>) – The desired data type of returned tensor
+in case <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_weight=None</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_dense_batch">
+<code class="sig-name descname">to_dense_batch</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">batch=None</em>, <em class="sig-param">fill_value=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/to_dense_batch.html#to_dense_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_dense_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a sparse batch of node features
+<span class="math notranslate nohighlight">\(\mathbf{X} \in \mathbb{R}^{(N_1 + \ldots + N_B) \times F}\)</span> (with
+<span class="math notranslate nohighlight">\(N_i\)</span> indicating the number of nodes in graph <span class="math notranslate nohighlight">\(i\)</span>), creates a
+dense node feature tensor
+<span class="math notranslate nohighlight">\(\mathbf{X} \in \mathbb{R}^{B \times N_{\max} \times F}\)</span> (with
+<span class="math notranslate nohighlight">\(N_{\max} = \max_i^B N_i\)</span>).
+In addition, a second tensor holding
+<span class="math notranslate nohighlight">\([N_1, \ldots, N_B] \in \mathbb{N}^B\)</span> is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Tensor</em>) – Node feature matrix
+<span class="math notranslate nohighlight">\(\mathbf{X} \in \mathbb{R}^{(N_1 + \ldots + N_B) \times F}\)</span>.</p></li>
+<li><p><strong>batch</strong> (<em>LongTensor</em><em>, </em><em>optional</em>) – Batch vector
+<span class="math notranslate nohighlight">\(\mathbf{b} \in {\{ 0, \ldots, B-1\}}^N\)</span>, which assigns each
+node to a specific example. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>fill_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The value for invalid entries in the
+resulting dense output tensor. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BoolTensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_dense_adj">
+<code class="sig-name descname">to_dense_adj</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">batch=None</em>, <em class="sig-param">edge_attr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/to_dense_adj.html#to_dense_adj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_dense_adj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts batched sparse adjacency matrices given by edge indices and
+edge attributes to a single dense batched adjacency matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>batch</strong> (<em>LongTensor</em><em>, </em><em>optional</em>) – Batch vector
+<span class="math notranslate nohighlight">\(\mathbf{b} \in {\{ 0, \ldots, B-1\}}^N\)</span>, which assigns each
+node to a specific example. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional edge
+features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.dense_to_sparse">
+<code class="sig-name descname">dense_to_sparse</code><span class="sig-paren">(</span><em class="sig-param">tensor</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/sparse.html#dense_to_sparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.dense_to_sparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dense adjacency matrix to a sparse adjacency matrix defined
+by edge indices and edge attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tensor</strong> – The dense adjacency matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.normalized_cut">
+<code class="sig-name descname">normalized_cut</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/normalized_cut.html#normalized_cut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.normalized_cut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the normalized cut <span class="math notranslate nohighlight">\(\mathbf{e}_{i,j} \cdot
+\left( \frac{1}{\deg(i)} + \frac{1}{\deg(j)} \right)\)</span> of a weighted graph
+given by edge indices and edge attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em>) – Edge weights or multi-dimensional edge features.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.grid">
+<code class="sig-name descname">grid</code><span class="sig-paren">(</span><em class="sig-param">height</em>, <em class="sig-param">width</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">device=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/grid.html#grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the edge indices of a two-dimensional grid graph with height
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">height</span></code> and width <code class="xref py py-attr docutils literal notranslate"><span class="pre">width</span></code> and its node positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The height of the grid.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The width of the grid.</p></li>
+<li><p><strong>dtype</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.device</span></code>, optional) – The desired data type of the
+returned position tensor.</p></li>
+<li><p><strong>dtype</strong> – The desired device of the
+returned tensors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.geodesic_distance">
+<code class="sig-name descname">geodesic_distance</code><span class="sig-paren">(</span><em class="sig-param">pos</em>, <em class="sig-param">face</em>, <em class="sig-param">src=None</em>, <em class="sig-param">dest=None</em>, <em class="sig-param">norm=True</em>, <em class="sig-param">max_distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/geodesic.html#geodesic_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.geodesic_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes (normalized) geodesic distances of a mesh given by <code class="xref py py-obj docutils literal notranslate"><span class="pre">pos</span></code>
+and <code class="xref py py-obj docutils literal notranslate"><span class="pre">face</span></code>. If <code class="xref py py-obj docutils literal notranslate"><span class="pre">src</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">dest</span></code> are given, this method only
+computes the geodesic distances for the respective source and target
+node-pairs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function requires the <code class="xref py py-obj docutils literal notranslate"><span class="pre">gdist</span></code> package.
+To install, run <code class="xref py py-obj docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cython</span> <span class="pre">&amp;&amp;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">gdist</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<em>Tensor</em>) – The node positions.</p></li>
+<li><p><strong>face</strong> (<em>LongTensor</em>) – The face indices.</p></li>
+<li><p><strong>src</strong> (<em>LongTensor</em><em>, </em><em>optional</em>) – If given, only compute geodesic distances
+for the specified source indices. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>dest</strong> (<em>LongTensor</em><em>, </em><em>optional</em>) – If given, only compute geodesic distances
+for the specified target indices. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Normalizes geodesic distances by
+<span class="math notranslate nohighlight">\(\sqrt{\textrm{area}(\mathcal{M})}\)</span>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – If given, only yields results for
+geodesic distances less than <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_distance</span></code>. This will speed
+up runtime dramatically. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_scipy_sparse_matrix">
+<code class="sig-name descname">to_scipy_sparse_matrix</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">edge_attr=None</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#to_scipy_sparse_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_scipy_sparse_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a graph given by edge indices and edge attributes to a scipy
+sparse matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>edge_attr</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – Edge weights or multi-dimensional
+edge features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.from_scipy_sparse_matrix">
+<code class="sig-name descname">from_scipy_sparse_matrix</code><span class="sig-paren">(</span><em class="sig-param">A</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#from_scipy_sparse_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.from_scipy_sparse_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a scipy sparse matrix to edge indices and edge attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>A</strong> (<em>scipy.sparse</em>) – A sparse matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_networkx">
+<code class="sig-name descname">to_networkx</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">node_attrs=None</em>, <em class="sig-param">edge_attrs=None</em>, <em class="sig-param">to_undirected=False</em>, <em class="sig-param">remove_self_loops=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#to_networkx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_networkx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> instance to a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code> if <a class="reference internal" href="#torch_geometric.utils.to_undirected" title="torch_geometric.utils.to_undirected"><code class="xref py py-attr docutils literal notranslate"><span class="pre">to_undirected</span></code></a> is set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, or
+an undirected <code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.Graph</span></code> otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><em>torch_geometric.data.Data</em></a>) – The data object.</p></li>
+<li><p><strong>node_attrs</strong> (<em>iterable of str</em><em>, </em><em>optional</em>) – The node attributes to be
+copied. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>edge_attrs</strong> (<em>iterable of str</em><em>, </em><em>optional</em>) – The edge attributes to be
+copied. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>to_undirected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, will return a
+a <code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.Graph</span></code> instead of a <code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code>. The
+undirected graph will correspond to the upper triangle of the
+corresponding adjacency matrix. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+<li><p><strong>remove_self_loops</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, will not
+include self loops in the resulting graph. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.from_networkx">
+<code class="sig-name descname">from_networkx</code><span class="sig-paren">(</span><em class="sig-param">G</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#from_networkx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.from_networkx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a <code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.Graph</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code> to a
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>G</strong> (<em>networkx.Graph</em><em> or </em><em>networkx.DiGraph</em>) – A networkx graph.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.to_trimesh">
+<code class="sig-name descname">to_trimesh</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#to_trimesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.to_trimesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> instance to a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">trimesh.Trimesh</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><em>torch_geometric.data.Data</em></a>) – The data object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.from_trimesh">
+<code class="sig-name descname">from_trimesh</code><span class="sig-paren">(</span><em class="sig-param">mesh</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/convert.html#from_trimesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.from_trimesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a <code class="xref py py-obj docutils literal notranslate"><span class="pre">trimesh.Trimesh</span></code> to a
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mesh</strong> (<em>trimesh.Trimesh</em>) – A <code class="xref py py-obj docutils literal notranslate"><span class="pre">trimesh</span></code> mesh.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.erdos_renyi_graph">
+<code class="sig-name descname">erdos_renyi_graph</code><span class="sig-paren">(</span><em class="sig-param">num_nodes</em>, <em class="sig-param">edge_prob</em>, <em class="sig-param">directed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/random.html#erdos_renyi_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.erdos_renyi_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> of a random Erdos-Renyi graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of nodes.</p></li>
+<li><p><strong>edge_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Probability of an edge.</p></li>
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, will return a
+directed graph. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.stochastic_blockmodel_graph">
+<code class="sig-name descname">stochastic_blockmodel_graph</code><span class="sig-paren">(</span><em class="sig-param">block_sizes</em>, <em class="sig-param">edge_probs</em>, <em class="sig-param">directed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/random.html#stochastic_blockmodel_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.stochastic_blockmodel_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> of a stochastic blockmodel graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_sizes</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>] or </em><em>LongTensor</em>) – The sizes of blocks.</p></li>
+<li><p><strong>edge_probs</strong> (<em>[</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>]</em><em>] or </em><em>FloatTensor</em>) – The density of edges going</p></li>
+<li><p><strong>each block to each other block. Must be symmetric if the graph is</strong> (<em>from</em>) – undirected.</p></li>
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, will return a
+directed graph. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.barabasi_albert_graph">
+<code class="sig-name descname">barabasi_albert_graph</code><span class="sig-paren">(</span><em class="sig-param">num_nodes</em>, <em class="sig-param">num_edges</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/random.html#barabasi_albert_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.barabasi_albert_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the <code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_index</span></code> of a Barabasi-Albert preferential
+attachment model, where a graph of <code class="xref py py-obj docutils literal notranslate"><span class="pre">num_nodes</span></code> nodes grows by
+attaching new nodes with <code class="xref py py-obj docutils literal notranslate"><span class="pre">num_edges</span></code> edges that are preferentially
+attached to existing nodes with high degree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of nodes.</p></li>
+<li><p><strong>num_edges</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of edges from a new node to existing nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.negative_sampling">
+<code class="sig-name descname">negative_sampling</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">num_nodes=None</em>, <em class="sig-param">num_neg_samples=None</em>, <em class="sig-param">force_undirected=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/negative_sampling.html#negative_sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.negative_sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples random negative edges of a graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>num_neg_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of negative samples to
+return. If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, will try to return a negative edge
+for every positive edge. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>force_undirected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, sampled
+negative edges will be undirected. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>LongTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.structured_negative_sampling">
+<code class="sig-name descname">structured_negative_sampling</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">num_nodes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/negative_sampling.html#structured_negative_sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.structured_negative_sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a negative edge <code class="xref py py-obj docutils literal notranslate"><span class="pre">(i,k)</span></code> for every positive edge
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">(i,j)</span></code> in the graph given by <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>, and returns it as a
+tuple of the form <code class="xref py py-obj docutils literal notranslate"><span class="pre">(i,j,k)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>num_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of nodes, <em>i.e.</em>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">max_val</span> <span class="pre">+</span> <span class="pre">1</span></code> of <code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code>. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(LongTensor, LongTensor, LongTensor)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.batched_negative_sampling">
+<code class="sig-name descname">batched_negative_sampling</code><span class="sig-paren">(</span><em class="sig-param">edge_index</em>, <em class="sig-param">batch</em>, <em class="sig-param">num_neg_samples=None</em>, <em class="sig-param">force_undirected=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/negative_sampling.html#batched_negative_sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.batched_negative_sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples random negative edges of multiple graphs given by
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">edge_index</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">batch</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<em>LongTensor</em>) – The edge indices.</p></li>
+<li><p><strong>batch</strong> (<em>LongTensor</em>) – Batch vector
+<span class="math notranslate nohighlight">\(\mathbf{b} \in {\{ 0, \ldots, B-1\}}^N\)</span>, which assigns each
+node to a specific example.</p></li>
+<li><p><strong>num_neg_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The number of negative samples to
+return. If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, will try to return a negative edge
+for every positive edge. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>force_undirected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, sampled
+negative edges will be undirected. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>LongTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.train_test_split_edges">
+<code class="sig-name descname">train_test_split_edges</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">val_ratio=0.05</em>, <em class="sig-param">test_ratio=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/train_test_split_edges.html#train_test_split_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.train_test_split_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits the edges of a <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object
+into positive and negative train/val/test edges, and adds attributes of
+<cite>train_pos_edge_index</cite>, <cite>train_neg_adj_mask</cite>, <cite>val_pos_edge_index</cite>,
+<cite>val_neg_edge_index</cite>, <cite>test_pos_edge_index</cite>, and <cite>test_neg_edge_index</cite>
+to <code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><em>Data</em></a>) – The data object.</p></li>
+<li><p><strong>val_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The ratio of positive validation
+edges. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">0.05</span></code>)</p></li>
+<li><p><strong>test_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – The ratio of positive test
+edges. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">0.1</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.accuracy">
+<code class="sig-name descname">accuracy</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the accuracy of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.true_positive">
+<code class="sig-name descname">true_positive</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#true_positive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.true_positive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of true positive predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.true_negative">
+<code class="sig-name descname">true_negative</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#true_negative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.true_negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of true negative predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.false_positive">
+<code class="sig-name descname">false_positive</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#false_positive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.false_positive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of false positive predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.false_negative">
+<code class="sig-name descname">false_negative</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#false_negative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.false_negative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of false negative predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.precision">
+<code class="sig-name descname">precision</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#precision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.precision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the precision
+<span class="math notranslate nohighlight">\(\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FP}}\)</span> of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.recall">
+<code class="sig-name descname">recall</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#recall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.recall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the recall
+<span class="math notranslate nohighlight">\(\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}\)</span> of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.f1_score">
+<code class="sig-name descname">f1_score</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#f1_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.f1_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the <span class="math notranslate nohighlight">\(F_1\)</span> score
+<span class="math notranslate nohighlight">\(2 \cdot \frac{\mathrm{precision} \cdot \mathrm{recall}}
+{\mathrm{precision}+\mathrm{recall}}\)</span> of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>Tensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>Tensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.intersection_and_union">
+<code class="sig-name descname">intersection_and_union</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em>, <em class="sig-param">batch=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#intersection_and_union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.intersection_and_union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes intersection and union of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>LongTensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>LongTensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+<li><p><strong>batch</strong> (<em>LongTensor</em>) – The assignment vector which maps each pred-target
+pair to an example.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">LongTensor</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="torch_geometric.utils.mean_iou">
+<code class="sig-name descname">mean_iou</code><span class="sig-paren">(</span><em class="sig-param">pred</em>, <em class="sig-param">target</em>, <em class="sig-param">num_classes</em>, <em class="sig-param">batch=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/utils/metric.html#mean_iou"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.utils.mean_iou" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the mean intersection over union score of predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> (<em>LongTensor</em>) – The predictions.</p></li>
+<li><p><strong>target</strong> (<em>LongTensor</em>) – The targets.</p></li>
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of classes.</p></li>
+<li><p><strong>batch</strong> (<em>LongTensor</em>) – The assignment vector which maps each pred-target
+pair to an example.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="io.html" class="btn btn-neutral float-right" title="torch_geometric.io" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="transforms.html" class="btn btn-neutral float-left" title="torch_geometric.transforms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

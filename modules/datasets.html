@@ -1,0 +1,1486 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>torch_geometric.datasets &mdash; pytorch_geometric 1.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="torch_geometric.transforms" href="transforms.html" />
+    <link rel="prev" title="torch_geometric.data" href="data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pyg_logo_text.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.4.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#id1">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/introduction.html">Introduction by Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#data-handling-of-graphs">Data Handling of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#common-benchmark-datasets">Common Benchmark Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#mini-batches">Mini-batches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#data-transforms">Data Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/introduction.html#learning-methods-on-graphs">Learning Methods on Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/create_gnn.html">Creating Message Passing Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#the-messagepassing-base-class">The “MessagePassing” Base Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#implementing-the-gcn-layer">Implementing the GCN Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_gnn.html#implementing-the-edge-convolution">Implementing the Edge Convolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/create_dataset.html">Creating Your Own Datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/create_dataset.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/batching.html">Advanced Mini-Batching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notes/batching.html#pairs-of-graphs">Pairs of Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notes/batching.html#bipartite-graphs">Bipartite Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/resources.html">External Resources</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/01-quick_survey.html">PyG 的快速调研</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="root.html">torch_geometric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nn.html">torch_geometric.nn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.conv.message_passing">Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.dense.dense_gcn_conv">Dense Convolutional Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.norm">Normalization Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.glob">Global Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.pool">Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.dense.diff_pool">Dense Pooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.unpool">Unpooling Layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.models">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nn.html#module-torch_geometric.nn.data_parallel">DataParallel Layers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">torch_geometric.data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">torch_geometric.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transforms.html">torch_geometric.transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">torch_geometric.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">torch_geometric.io</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pytorch_geometric</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>torch_geometric.datasets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/datasets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-torch_geometric.datasets">
+<span id="torch-geometric-datasets"></span><h1>torch_geometric.datasets<a class="headerlink" href="#module-torch_geometric.datasets" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="torch_geometric.datasets.KarateClub">
+<em class="property">class </em><code class="sig-name descname">KarateClub</code><span class="sig-paren">(</span><em class="sig-param">transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/karate.html#KarateClub"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.KarateClub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zachary’s karate club network from the <a class="reference external" href="http://www1.ind.ku.dk/complexLearning/zachary1977.pdf">“An Information Flow Model for
+Conflict and Fission in Small Groups”</a> paper, containing
+34 nodes, connected by 154 (undirected and unweighted) edges.
+Every node is labeled by one of two classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.TUDataset">
+<em class="property">class </em><code class="sig-name descname">TUDataset</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em>, <em class="sig-param">use_node_attr=False</em>, <em class="sig-param">use_edge_attr=False</em>, <em class="sig-param">cleaned=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/tu_dataset.html#TUDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.TUDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A variety of graph kernel benchmark datasets, <em>.e.g.</em> “IMDB-BINARY”,
+“REDDIT-BINARY” or “PROTEINS”, collected from the <a class="reference external" href="http://graphkernels.cs.tu-dortmund.de">TU Dortmund University</a>.
+In addition, this dataset wrapper provides <a class="reference external" href="https://github.com/nd7141/graph_datasets">cleaned dataset versions</a> as motivated by the
+<a class="reference external" href="https://arxiv.org/abs/1910.12091">“Understanding Isomorphism Bias in Graph Data Sets”</a> paper, containing only non-isomorphic
+graphs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some datasets may not come with any node labels.
+You can then either make use of the argument <code class="xref py py-obj docutils literal notranslate"><span class="pre">use_node_attr</span></code>
+to load additional continuous node attributes (if present) or provide
+synthetic node features using transforms such as
+like <a class="reference internal" href="transforms.html#torch_geometric.transforms.Constant" title="torch_geometric.transforms.Constant"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.transforms.Constant</span></code></a> or
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.OneHotDegree" title="torch_geometric.transforms.OneHotDegree"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.transforms.OneHotDegree</span></code></a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The <a class="reference external" href="http://graphkernels.cs.tu-dortmund.de">name</a> of
+the dataset.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>use_node_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the dataset will
+contain additional continuous node attributes (if present).
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+<li><p><strong>use_edge_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the dataset will
+contain additional continuous edge attributes (if present).
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+<li><p><strong>cleaned</strong> – (bool, optional): If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the dataset will
+contain only non-isomorphic graphs. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.Planetoid">
+<em class="property">class </em><code class="sig-name descname">Planetoid</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/planetoid.html#Planetoid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.Planetoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The citation network datasets “Cora”, “CiteSeer” and “PubMed” from the
+<a class="reference external" href="https://arxiv.org/abs/1603.08861">“Revisiting Semi-Supervised Learning with Graph Embeddings”</a> paper.
+Nodes represent documents and edges represent citation links.
+Training, validation and test splits are given by binary masks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CiteSeer&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;PubMed&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.CitationFull">
+<em class="property">class </em><code class="sig-name descname">CitationFull</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/citation_full.html#CitationFull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.CitationFull" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full citation network datasets from the
+<a class="reference external" href="https://arxiv.org/abs/1707.03815">“Deep Gaussian Embedding of Graphs: Unsupervised Inductive Learning via
+Ranking”</a> paper.
+Nodes represent documents and edges represent citation links.
+Datasets include <cite>citeseer</cite>, <cite>cora</cite>, <cite>cora_ml</cite>, <cite>dblp</cite>, <cite>pubmed</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora_ML&quot;</span></code>
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CiteSeer&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;DBLP&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;PubMed&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.CoraFull">
+<em class="property">class </em><code class="sig-name descname">CoraFull</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/citation_full.html#CoraFull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.CoraFull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <code class="xref py py-class docutils literal notranslate"><span class="pre">torch_geometric.dataset.CitationFull</span></code> with
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">name=&quot;cora&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.Coauthor">
+<em class="property">class </em><code class="sig-name descname">Coauthor</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/coauthor.html#Coauthor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.Coauthor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Coauthor CS and Coauthor Physics networks from the
+<a class="reference external" href="https://arxiv.org/abs/1811.05868">“Pitfalls of Graph Neural Network Evaluation”</a> paper.
+Nodes represent authors that are connected by an edge if they co-authored a
+paper.
+Given paper keywords for each author’s papers, the task is to map authors
+to their respective field of study.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CS&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Physics&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.Amazon">
+<em class="property">class </em><code class="sig-name descname">Amazon</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/amazon.html#Amazon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.Amazon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Amazon Computers and Amazon Photo networks from the
+<a class="reference external" href="https://arxiv.org/abs/1811.05868">“Pitfalls of Graph Neural Network Evaluation”</a> paper.
+Nodes represent goods and edges represent that two goods are frequently
+bought together.
+Given product reviews as bag-of-words node features, the task is to
+map goods to their respective product category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Computers&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Photo&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.PPI">
+<em class="property">class </em><code class="sig-name descname">PPI</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">split='train'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/ppi.html#PPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.PPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>The protein-protein interaction networks from the <a class="reference external" href="https://arxiv.org/abs/1707.04638">“Predicting
+Multicellular Function through Multi-layer Tissue Networks”</a> paper, containing positional gene
+sets, motif gene sets and immunological signatures as features (50 in
+total) and gene ontology sets as labels (121 in total).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>split</strong> (<em>string</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>, loads the training dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code>, loads the validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;test&quot;</span></code>, loads the test dataset. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.Reddit">
+<em class="property">class </em><code class="sig-name descname">Reddit</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/reddit.html#Reddit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.Reddit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Reddit dataset from the <a class="reference external" href="https://arxiv.org/abs/1706.02216">“Inductive Representation Learning on
+Large Graphs”</a> paper, containing
+Reddit posts belonging to different communities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.QM7b">
+<em class="property">class </em><code class="sig-name descname">QM7b</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/qm7.html#QM7b"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.QM7b" title="Permalink to this definition">¶</a></dt>
+<dd><p>The QM7b dataset from the <a class="reference external" href="https://arxiv.org/abs/1703.00564">“MoleculeNet: A Benchmark for Molecular
+Machine Learning”</a> paper, consisting of
+7,211 molecules with 14 regression targets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.QM9">
+<em class="property">class </em><code class="sig-name descname">QM9</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/qm9.html#QM9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.QM9" title="Permalink to this definition">¶</a></dt>
+<dd><p>The QM9 dataset from the <a class="reference external" href="https://arxiv.org/abs/1703.00564">“MoleculeNet: A Benchmark for Molecular
+Machine Learning”</a> paper, consisting of
+about 130,000 molecules with 16 regression targets.
+Each molecule includes complete spatial information for the single low
+energy conformation of the atoms in the molecule.
+In addition, we provide the atom features from the <a class="reference external" href="https://arxiv.org/abs/1704.01212">“Neural Message
+Passing for Quantum Chemistry”</a> paper.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 20%" />
+<col style="width: 49%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Target</p></th>
+<th class="head"><p>Property</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mu\)</span></p></td>
+<td><p>Dipole moment</p></td>
+<td><p><span class="math notranslate nohighlight">\(\textrm{D}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p><span class="math notranslate nohighlight">\(\alpha\)</span></p></td>
+<td><p>Isotropic polarizability</p></td>
+<td><p><span class="math notranslate nohighlight">\({a_0}^3\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{\textrm{HOMO}}\)</span></p></td>
+<td><p>Highest occupied molecular orbital energy</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{\textrm{LUMO}}\)</span></p></td>
+<td><p>Lowest unoccupied molecular orbital energy</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><span class="math notranslate nohighlight">\(\Delta \epsilon\)</span></p></td>
+<td><p>Gap between <span class="math notranslate nohighlight">\(\epsilon_{\textrm{HOMO}}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{\textrm{LUMO}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p><span class="math notranslate nohighlight">\(\langle R^2 \rangle\)</span></p></td>
+<td><p>Electronic spatial extent</p></td>
+<td><p><span class="math notranslate nohighlight">\({a_0}^2\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p><span class="math notranslate nohighlight">\(\textrm{ZPVE}\)</span></p></td>
+<td><p>Zero point vibrational energy</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p><span class="math notranslate nohighlight">\(U_0\)</span></p></td>
+<td><p>Internal energy at 0K</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p><span class="math notranslate nohighlight">\(U\)</span></p></td>
+<td><p>Internal energy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p><span class="math notranslate nohighlight">\(H\)</span></p></td>
+<td><p>Enthalpy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p><span class="math notranslate nohighlight">\(G\)</span></p></td>
+<td><p>Free energy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(E_{\textrm{h}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{\textrm{v}}\)</span></p></td>
+<td><p>Heat capavity at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\textrm{cal}}{\textrm{mol K}}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p><span class="math notranslate nohighlight">\(U_0^{\textrm{ATOM}}\)</span></p></td>
+<td><p>Atomization energy at 0K</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\textrm{kcal}}{\textrm{mol}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p><span class="math notranslate nohighlight">\(U^{\textrm{ATOM}}\)</span></p></td>
+<td><p>Atomization energy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\textrm{kcal}}{\textrm{mol}}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p><span class="math notranslate nohighlight">\(H^{\textrm{ATOM}}\)</span></p></td>
+<td><p>Atomization enthalpy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\textrm{kcal}}{\textrm{mol}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p><span class="math notranslate nohighlight">\(G^{\textrm{ATOM}}\)</span></p></td>
+<td><p>Atomization free energy at 298.15K</p></td>
+<td><p><span class="math notranslate nohighlight">\(\frac{\textrm{kcal}}{\textrm{mol}}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.Entities">
+<em class="property">class </em><code class="sig-name descname">Entities</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/entities.html#Entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.Entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>The relational entities networks “AIFB”, “MUTAG”, “BGS” and “AM” from
+the <a class="reference external" href="https://arxiv.org/abs/1703.06103">“Modeling Relational Data with Graph Convolutional Networks”</a> paper.
+Training and test splits are given by node indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;AIFB&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;MUTAG&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;BGS&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;AM&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.GEDDataset">
+<em class="property">class </em><code class="sig-name descname">GEDDataset</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/ged_dataset.html#GEDDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.GEDDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The GED datasets from the <a class="reference external" href="https://arxiv.org/abs/1808.05689">“Graph Edit Distance Computation via Graph
+Neural Networks”</a> paper.
+GEDs can be accessed via the global attributes <code class="xref py py-obj docutils literal notranslate"><span class="pre">ged</span></code> and
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_ged</span></code> and provide the exact GEDs for all train/train graph pairs
+and all train/test graph pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset (one of <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;AIDS700nef&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;LINUX&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;ALKANE&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;IMDBMulti&quot;</span></code>).</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.MNISTSuperpixels">
+<em class="property">class </em><code class="sig-name descname">MNISTSuperpixels</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/mnist_superpixels.html#MNISTSuperpixels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.MNISTSuperpixels" title="Permalink to this definition">¶</a></dt>
+<dd><p>MNIST superpixels dataset from the <a class="reference external" href="https://arxiv.org/abs/1611.08402">“Geometric Deep Learning on
+Graphs and Manifolds Using Mixture Model CNNs”</a> paper, containing 70,000 graphs with
+75 nodes each.
+Every graph is labeled by one of 10 classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.FAUST">
+<em class="property">class </em><code class="sig-name descname">FAUST</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/faust.html#FAUST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.FAUST" title="Permalink to this definition">¶</a></dt>
+<dd><p>The FAUST humans dataset from the <a class="reference external" href="http://files.is.tue.mpg.de/black/papers/FAUST2014.pdf">“FAUST: Dataset and Evaluation for
+3D Mesh Registration”</a> paper,
+containing 100 watertight meshes representing 10 different poses for 10
+different subjects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.DynamicFAUST">
+<em class="property">class </em><code class="sig-name descname">DynamicFAUST</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">subjects=None</em>, <em class="sig-param">categories=None</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/dynamic_faust.html#DynamicFAUST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.DynamicFAUST" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dynamic FAUST humans dataset from the <a class="reference external" href="http://files.is.tue.mpg.de/black/papers/dfaust2017.pdf">“Dynamic FAUST: Registering
+Human Bodies in Motion”</a> paper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>subjects</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – List of subjects to include in the
+dataset. Can include the subjects <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50002&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50004&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50007&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50009&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50020&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50021&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50022&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50025&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50026&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;50027&quot;</span></code>.
+If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the dataset will contain all subjects.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>categories</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – List of categories to include in the
+dataset. Can include the categories <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;chicken_wings&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;hips&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;jiggle_on_toes&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;jumping_jacks&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;knees&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;light_hopping_loose&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;light_hopping_stiff&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;one_leg_jump&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;one_leg_loose&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;personal_move&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;punching&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;running_on_spot&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;running_on_spot_bugfix&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;shake_arms&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;shake_hips&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;shoulders&quot;</span></code>.
+If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the dataset will contain all categories.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.ShapeNet">
+<em class="property">class </em><code class="sig-name descname">ShapeNet</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">categories=None</em>, <em class="sig-param">include_normals=True</em>, <em class="sig-param">split='trainval'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/shapenet.html#ShapeNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.ShapeNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ShapeNet part level segmentation dataset from the <a class="reference external" href="http://web.stanford.edu/~ericyi/papers/part_annotation_16_small.pdf">“A Scalable
+Active Framework for Region Annotation in 3D Shape Collections”</a>
+paper, containing about 17,000 3D shape point clouds from 16 shape
+categories.
+Each category is annotated with 2 to 6 parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>categories</strong> (<em>string</em><em> or </em><em>[</em><em>string</em><em>]</em><em>, </em><em>optional</em>) – The category of the CAD
+models (one or a combination of <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Airplane&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bag&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cap&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Car&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Chair&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Earphone&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Guitar&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Knife&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Lamp&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Laptop&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Motorbike&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Mug&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Pistol&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Rocket&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Skateboard&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Table&quot;</span></code>).
+Can be explicitly set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a> to load all categories.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>include_normals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If set to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>, will not
+include normal vectors as input features. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>split</strong> (<em>string</em><em>, </em><em>optional</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>, loads the training
+dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code>, loads the validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;trainval&quot;</span></code>, loads the training and validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;test&quot;</span></code>, loads the test dataset.
+(default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;trainval&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.ModelNet">
+<em class="property">class </em><code class="sig-name descname">ModelNet</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name='10'</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/modelnet.html#ModelNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.ModelNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ModelNet10/40 datasets from the <a class="reference external" href="https://people.csail.mit.edu/khosla/papers/cvpr2015_wu.pdf">“3D ShapeNets: A Deep
+Representation for Volumetric Shapes”</a> paper,
+containing CAD models of 10 and 40 categories, respectively.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;10&quot;</span></code> for
+ModelNet10, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;40&quot;</span></code> for ModelNet40). (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;10&quot;</span></code>)</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.CoMA">
+<em class="property">class </em><code class="sig-name descname">CoMA</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/coma.html#CoMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.CoMA" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CoMA 3D faces dataset from the <a class="reference external" href="https://arxiv.org/abs/1807.10267">“Generating 3D faces using
+Convolutional Mesh Autoencoders”</a>
+paper, containing 20,466 meshes of extreme expressions captured over 12
+different subjects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.SHREC2016">
+<em class="property">class </em><code class="sig-name descname">SHREC2016</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">partiality</em>, <em class="sig-param">category</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/shrec2016.html#SHREC2016"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.SHREC2016" title="Permalink to this definition">¶</a></dt>
+<dd><p>The SHREC 2016 partial matching dataset from the <a class="reference external" href="http://www.dais.unive.it/~shrec2016/shrec16-partial.pdf">“SHREC’16: Partial
+Matching of Deformable Shapes”</a> paper.
+The reference shape can be referenced via <code class="xref py py-obj docutils literal notranslate"><span class="pre">dataset.ref</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>partiality</strong> (<em>string</em>) – The partiality of the dataset (one of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Holes&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cuts&quot;</span></code>).</p></li>
+<li><p><strong>category</strong> (<em>string</em>) – The category of the dataset (one of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Centaur&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;David&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Dog&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Horse&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Michael&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Victoria&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Wolf&quot;</span></code>).</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.TOSCA">
+<em class="property">class </em><code class="sig-name descname">TOSCA</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">categories=None</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/tosca.html#TOSCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.TOSCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>The TOSCA dataset from the <a class="reference external" href="https://www.amazon.com/Numerical-Geometry-Non-Rigid-Monographs-Computer/dp/0387733000">“Numerical Geometry of Non-Ridig Shapes”</a> book, containing 80 meshes.
+Meshes within the same category have the same triangulation and an equal
+number of vertices numbered in a compatible way.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>categories</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>optional</em>) – List of categories to include in the
+dataset. Can include the categories <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Centaur&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;David&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Dog&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Gorilla&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Horse&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Michael&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Victoria&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Wolf&quot;</span></code>. If set to
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>, the dataset will contain all categories. (default:
+<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.PCPNetDataset">
+<em class="property">class </em><code class="sig-name descname">PCPNetDataset</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">category</em>, <em class="sig-param">split='train'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/pcpnet_dataset.html#PCPNetDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.PCPNetDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The PCPNet dataset from the <a class="reference external" href="https://arxiv.org/abs/1710.04954">“PCPNet: Learning Local Shape Properties
+from Raw Point Clouds”</a> paper,
+consisting of 30 shapes, each given as a point cloud, densely sampled with
+100k points.
+For each shape, surface normals and local curvatures are given as node
+features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>category</strong> (<em>string</em>) – The training set category (one of <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;NoNoise&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Noisy&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;VarDensity&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;NoisyAndVarDensity&quot;</span></code>
+for <code class="xref py py-obj docutils literal notranslate"><span class="pre">split=&quot;train&quot;</span></code> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">split=&quot;val&quot;</span></code>,
+or one of <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;All&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;LowNoise&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;MedNoise&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;HighNoise&quot;,</span> <span class="pre">:obj:</span></code>”VarDensityStriped”,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;VarDensityGradient&quot;</span></code> for <code class="xref py py-obj docutils literal notranslate"><span class="pre">split=&quot;test&quot;</span></code>).</p></li>
+<li><p><strong>split</strong> (<em>string</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>, loads the training dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code>, loads the validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;test&quot;</span></code>, loads the test dataset. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.S3DIS">
+<em class="property">class </em><code class="sig-name descname">S3DIS</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">test_area=6</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/s3dis.html#S3DIS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.S3DIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (pre-processed) Stanford Large-Scale 3D Indoor Spaces dataset from
+the <a class="reference external" href="http://buildingparser.stanford.edu/images/3D_Semantic_Parsing.pdf">“3D Semantic Parsing of Large-Scale Indoor Spaces”</a>
+paper, containing point clouds of six large-scale indoor parts in three
+buildings with 12 semantic elements (and one clutter class).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>test_area</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Which area to use for testing (1-6).
+(default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">6</span></code>)</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.GeometricShapes">
+<em class="property">class </em><code class="sig-name descname">GeometricShapes</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/geometry.html#GeometricShapes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.GeometricShapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synthetic dataset of various geometric shapes like cubes, spheres or
+pyramids.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Data objects hold mesh faces instead of edge indices.
+To convert the mesh to a graph, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.FaceToEdge" title="torch_geometric.transforms.FaceToEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.FaceToEdge</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">pre_transform</span></code>.
+To convert the mesh to a point cloud, use the
+<a class="reference internal" href="transforms.html#torch_geometric.transforms.SamplePoints" title="torch_geometric.transforms.SamplePoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.transforms.SamplePoints</span></code></a> as <code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code> to
+sample a fixed number of points on the mesh faces according to their
+face area.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.BitcoinOTC">
+<em class="property">class </em><code class="sig-name descname">BitcoinOTC</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">edge_window_size=10</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/bitcoin_otc.html#BitcoinOTC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.BitcoinOTC" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Bitcoin-OTC dataset from the <a class="reference external" href="https://arxiv.org/abs/1902.10191">“EvolveGCN: Evolving Graph
+Convolutional Networks for Dynamic Graphs”</a> paper, consisting of 138
+who-trusts-whom networks of sequential time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>edge_window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – The window size for the existence of
+an edge in the graph sequence since its initial creation.
+(default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">10</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.ICEWS18">
+<em class="property">class </em><code class="sig-name descname">ICEWS18</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">split='train'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/icews.html#ICEWS18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.ICEWS18" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Integrated Crisis Early Warning System (ICEWS) dataset used in
+the, <em>e.g.</em>, <a class="reference external" href="https://arxiv.org/abs/1904.05530">“Recurrent Event Network for Reasoning over Temporal
+Knowledge Graphs”</a> paper, consisting of
+events collected from 1/1/2018 to 10/31/2018 (24 hours time granularity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>split</strong> (<em>string</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>, loads the training dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code>, loads the validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;test&quot;</span></code>, loads the test dataset. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.GDELT">
+<em class="property">class </em><code class="sig-name descname">GDELT</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">split='train'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/gdelt.html#GDELT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.GDELT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Global Database of Events, Language, and Tone (GDELT) dataset used
+in the, <em>e.g.</em>, <a class="reference external" href="https://arxiv.org/abs/1904.05530">“Recurrent Event Network for Reasoning over Temporal
+Knowledge Graphs”</a> paper, consisting of
+events collected from 1/1/2018 to 1/31/2018 (15 minutes time granularity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>split</strong> (<em>string</em>) – If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>, loads the training dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;val&quot;</span></code>, loads the validation dataset.
+If <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;test&quot;</span></code>, loads the test dataset. (default: <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;train&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.DBP15K">
+<em class="property">class </em><code class="sig-name descname">DBP15K</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">pair</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/dbp15k.html#DBP15K"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.DBP15K" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DBP15K dataset from the
+<a class="reference external" href="https://arxiv.org/abs/1708.05045">“Cross-lingual Entity Alignment via Joint Attribute-Preserving Embedding”</a> paper, where Chinese, Japanese and
+French versions of DBpedia were linked to its English version.
+Node features are given by pre-trained and aligned monolingual word
+embeddings from the <a class="reference external" href="https://arxiv.org/abs/1905.11605">“Cross-lingual Knowledge Graph Alignment via Graph
+Matching Neural Network”</a> paper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>pair</strong> (<em>string</em>) – The pair of languages (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;en_zh&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;en_fr&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;en_ja&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;zh_en&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;fr_en&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;ja_en&quot;</span></code>).</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.WILLOWObjectClass">
+<em class="property">class </em><code class="sig-name descname">WILLOWObjectClass</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">category</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/willow_object_class.html#WILLOWObjectClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.WILLOWObjectClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The WILLOW-ObjectClass dataset from the <a class="reference external" href="https://www.di.ens.fr/willow/pdfscurrent/cho2013.pdf">“Learning Graphs to Match”</a> paper,
+containing 10 equal keypoints of at least 40 images in each category.
+The keypoints contain interpolated features from a pre-trained VGG16 model
+on ImageNet (<code class="xref py py-obj docutils literal notranslate"><span class="pre">relu4_2</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">relu5_1</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>category</strong> (<em>string</em>) – The category of the images (one of <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Car&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Duck&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Face&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Motorbike&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Winebottle&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.PascalVOCKeypoints">
+<em class="property">class </em><code class="sig-name descname">PascalVOCKeypoints</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">category</em>, <em class="sig-param">train=True</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/pascal.html#PascalVOCKeypoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.PascalVOCKeypoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Pascal VOC 2011 dataset with Berkely annotations of keypoints from
+the <a class="reference external" href="https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/human/poselets_iccv09.pdf">“Poselets: Body Part Detectors Trained Using 3D Human Pose
+Annotations”</a> paper, containing 0 to 23 keypoints per
+example over 20 categories.
+The dataset is pre-filtered to exclude difficult, occluded and truncated
+objects.
+The keypoints contain interpolated features from a pre-trained VGG16 model
+on ImageNet (<code class="xref py py-obj docutils literal notranslate"><span class="pre">relu4_2</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">relu5_1</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>category</strong> (<em>string</em>) – The category of the images (one of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Aeroplane&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bicycle&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bird&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Boat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bottle&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bus&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Car&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Chair&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Diningtable&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Dog&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Horse&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Motorbike&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Person&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Pottedplant&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Sheep&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Sofa&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Train&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;TVMonitor&quot;</span></code>)</p></li>
+<li><p><strong>train</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – If <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, loads the training dataset,
+otherwise the test dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.PascalPF">
+<em class="property">class </em><code class="sig-name descname">PascalPF</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">category</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/pascal_pf.html#PascalPF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.PascalPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Pascal-PF dataset from the <a class="reference external" href="https://arxiv.org/abs/1511.05065">“Proposal Flow”</a> paper, containing 4 to 16 keypoints
+per example over 20 categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>category</strong> (<em>string</em>) – The category of the images (one of
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Aeroplane&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bicycle&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bird&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Boat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bottle&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Bus&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Car&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cat&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Chair&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Diningtable&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Dog&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Horse&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Motorbike&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Person&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Pottedplant&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Sheep&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Sofa&quot;</span></code>,
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Train&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;TVMonitor&quot;</span></code>)</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.SNAPDataset">
+<em class="property">class </em><code class="sig-name descname">SNAPDataset</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em>, <em class="sig-param">pre_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/snap_dataset.html#SNAPDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.SNAPDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A variety of graph datasets collected from <a class="reference external" href="https://snap.stanford.edu/data">SNAP at Stanford University</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the dataset.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_filter</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a boolean
+value, indicating whether the data object should be included in the
+final dataset. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.SuiteSparseMatrixCollection">
+<em class="property">class </em><code class="sig-name descname">SuiteSparseMatrixCollection</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">group</em>, <em class="sig-param">name</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">pre_transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/suite_sparse.html#SuiteSparseMatrixCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.SuiteSparseMatrixCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A suite of sparse matrix benchmarks known as the <a class="reference external" href="https://sparse.tamu.edu">Suite Sparse Matrix
+Collection</a> collected from a wide range of
+applications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – The group of the sparse matrix.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – The name of the sparse matrix.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+<li><p><strong>pre_transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in
+an <a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a
+transformed version. The data object will be transformed before
+being saved to disk. (default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="torch_geometric.datasets.TrackMLParticleTrackingDataset">
+<em class="property">class </em><code class="sig-name descname">TrackMLParticleTrackingDataset</code><span class="sig-paren">(</span><em class="sig-param">root</em>, <em class="sig-param">transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/particle.html#TrackMLParticleTrackingDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.TrackMLParticleTrackingDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="https://www.kaggle.com/c/trackml-particle-identification">TrackML Particle Tracking Challenge</a> dataset to
+reconstruct particle tracks from 3D points left in the silicon detectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>string</em>) – Root directory where the dataset should be saved.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform that takes in an
+<a class="reference internal" href="data.html#torch_geometric.data.Data" title="torch_geometric.data.Data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_geometric.data.Data</span></code></a> object and returns a transformed
+version. The data object will be transformed before every access.
+(default: <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="torch_geometric.datasets.TrackMLParticleTrackingDataset.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">idx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/torch_geometric/datasets/particle.html#TrackMLParticleTrackingDataset.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#torch_geometric.datasets.TrackMLParticleTrackingDataset.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the data object at index <code class="xref py py-obj docutils literal notranslate"><span class="pre">idx</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="transforms.html" class="btn btn-neutral float-right" title="torch_geometric.transforms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data.html" class="btn btn-neutral float-left" title="torch_geometric.data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Matthias Fey
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
