@@ -1,4 +1,4 @@
-:github_url: https://github.com/rusty1s/pytorch_geometric
+:github_url: https://causalai.github.io/pytorch_geometric/
 
 PyTorch Geometric Documentation
 ===============================
