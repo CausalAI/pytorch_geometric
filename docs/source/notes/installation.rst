@@ -1,23 +1,26 @@
-Installation
+PyG安装
 ============
 
-We have outsourced a lot of functionality of PyTorch Geometric to other packages, which needs to be installed in advance.
+我们已经将 PyTorch Geometric 的许多功能外包给其他软件包，需要预先安装。
 These packages come with their own CPU and GPU kernel implementations based on `C++/CUDA extensions <https://github.com/pytorch/extension-cpp/>`_ introduced in PyTorch 0.4.0.
 
 .. note::
-    We do not recommend installation as root user on your system python.
-    Please setup an `Anaconda/Miniconda <https://conda.io/docs/user-guide/install/index.html/>`_ environment or create a `Docker image <https://www.docker.com/>`_.
+    我们不建议以root用户身份在系统python上进行安装。
+    请设置 `Anaconda/Miniconda <https://conda.io/docs/user-guide/install/index.html/>`_ 环境或创建 `Docker image <https://www.docker.com/>`_ 映像。
+    
+安装步骤
+-----------------
+    
+请按照以下步骤来安装：
 
-Please follow the steps below for a successful installation:
-
-#. Ensure that PyTorch 1.4.0 is installed:
+#. 确保已安装PyTorch 1.4.0：
 
     .. code-block:: none
 
         $ python -c "import torch; print(torch.__version__)"
         >>> 1.4.0
 
-#. Ensure CUDA is setup correctly (optional):
+#. 确保正确设置了CUDA（可选）：
 
     #. Check if PyTorch is installed with CUDA support:
 
@@ -67,7 +70,7 @@ Please follow the steps below for a successful installation:
             $ nvcc --version
             >>> 10.0
 
-#. Install all needed packages with ``${CUDA}`` replaced by either ``cpu``, ``cu92``, ``cu100`` or ``cu101`` depending on your PyTorch installation:
+#. 安装所有需要的软件包 with ``${CUDA}`` replaced by either ``cpu``, ``cu92``, ``cu100`` or ``cu101`` depending on your PyTorch installation:
 
     .. code-block:: none
 
@@ -105,7 +108,7 @@ with
 
 in ``lib/python{xxx}/distutils/ccompiler.py``.
 
-Frequently Asked Questions
+常见问题集
 --------------------------
 
 #. ``ImportError: ***: cannot open shared object file: No such file or directory``: Add CUDA to your ``$LD_LIBRARY_PATH`` (see `Issue#43 <https://github.com/rusty1s/pytorch_geometric/issues/43>`_).

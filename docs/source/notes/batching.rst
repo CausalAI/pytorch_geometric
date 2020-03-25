@@ -1,20 +1,16 @@
 Advanced Mini-Batching
 ======================
 
-The creation of mini-batching is crucial for letting the training of a deep learning model scale to huge amounts of data.
-Instead of processing examples one-by-one, a mini-batch groups a set of examples into a unified representation where it can efficiently be processed in parallel.
-In the image or language domain, this procedure is typically achieved by rescaling or padding each example into a set to equally-sized shapes, and examples are then grouped in an additional dimension.
+The creation of mini-batching 对于让深度学习模型的训练能够扩展到 huge amounts of data 至关重要。 Instead of processing examples one-by-one, a mini-batch groups a set of examples into a unified representation where it can efficiently be processed in parallel. 在图像或语言域中, this procedure is typically achieved by rescaling or padding each example into a set to equally-sized shapes, and examples are then grouped in an additional dimension.
 The length of this dimension is then equal to the number of examples grouped in a mini-batch and is typically referred to as the :obj:`batch_size`.
 
-Since graphs are one of the most general data structures that can hold *any* number of nodes or edges, the two approaches described above are either not feasible or may result in a lot of unnecessary memory consumption.
-In PyTorch Geometric, we opt for another approach to achieve parallelization across a number of examples.
-Here, adjacency matrices are stacked in a diagonal fashion (creating a giant graph that holds multiple isolated subgraphs), and node and target features are simply concatenated in the node dimension, *i.e.*
+Since graphs are one of the most general data structures that can hold *any* number of nodes or edges, 上述两种方法要么不可行，要么可能导致大量不必要的内存消耗。在PyTorch Geometric中，我们选择了另一种方法来实现 parallelization across a number of examples. 在这里，邻接矩阵以对角线形式堆叠 (creating a giant graph that holds multiple isolated subgraphs), and node and target features are simply concatenated in the node dimension, *i.e.*
 
 .. math::
 
     \mathbf{A} = \begin{bmatrix} \mathbf{A}_1 & & \\ & \ddots & \\ & & \mathbf{A}_n \end{bmatrix}, \qquad \mathbf{X} = \begin{bmatrix} \mathbf{X}_1 \\ \vdots \\ \mathbf{X}_n \end{bmatrix}, \qquad \mathbf{Y} = \begin{bmatrix} \mathbf{Y}_1 \\ \vdots \\ \mathbf{Y}_n \end{bmatrix}.
 
-This procedure has some crucial advantages over other batching procedures:
+与其他批处理过程相比，此过程具有一些关键优势：
 
 1. GNN operators that rely on a message passing scheme do not need to be modified since messages still cannot be exchanged between two nodes that belong to different graphs.
 

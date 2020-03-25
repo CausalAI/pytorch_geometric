@@ -11,9 +11,12 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'nbsphinx',
+    'sphinx.ext.todo'
 ]
 
-source_suffix = '.rst'
+source_suffix = ['.rst', '.ipynb']
+exclude_patterns = ['.ipynb_checkpoints', 'checkpoints.ipynb']
 master_doc = 'index'
 
 author = 'Matthias Fey'

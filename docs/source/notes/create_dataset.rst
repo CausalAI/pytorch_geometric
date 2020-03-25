@@ -1,7 +1,7 @@
-Creating Your Own Datasets
+构建数据集
 ==========================
 
-Although PyTorch Geometric already contains a lot of useful datasets, you may wish to create your own dataset with self-recorded or non-publicly available data.
+尽管 PyTorch Geometric 已包含许多有用的数据集，但您可能希望创建自己的数据集 with self-recorded or non-publicly available data.
 
 Implementing datasets by yourself is straightforward and you may want to take a look at the source code to find out how the various datasets are implemented.
 However, we give a brief introduction on what is needed to setup your own dataset.
@@ -21,7 +21,7 @@ Use cases may involve the restriction of data objects being of a specific class.
 Creating "In Memory Datasets"
 -----------------------------
 
-In order to create a :class:`torch_geometric.data.InMemoryDataset`, you need to implement four fundamental methods:
+In order to create a :class:`torch_geometric.data.InMemoryDataset`, 您需要实现四种基本方法：
 
 :meth:`torch_geometric.data.InMemoryDataset.raw_file_names`:
     A list of files in the :obj:`raw_dir` which needs to be found in order to skip the download.
@@ -80,9 +80,8 @@ Let's see this process in a simplified example:
 Creating "Larger" Datasets
 --------------------------
 
-For creating datasets which do not fit into memory, the :class:`torch_geometric.data.Dataset` must be used, where we closely follow the concepts of the :obj:`torchvision` datasets.
+For creating datasets which do not fit into memory, the :class:`torch_geometric.data.Dataset` must be used, where we closely follow the concepts of the :obj:`torchvision` datasets. 因此，需要进一步实现以下方法：
 
-Therefore, the following methods need to be further implemented:
 
 :meth:`torch_geometric.data.Dataset.len`:
     Returns the number of examples in your dataset.
@@ -141,7 +140,7 @@ Let's see this process in a simplified example:
 
 Here, each graph data object gets saved individually in :meth:`torch_geometric.data.Dataset.process`, and is manually loaded in :meth:`torch_geometric.data.Dataset.get`.
 
-Frequently Asked Questions
+常见问题集
 --------------------------
 
 #. **How can I skip the execution of** :meth:`download` **and/or** :meth:`process` **?**

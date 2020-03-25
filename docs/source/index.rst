@@ -23,6 +23,14 @@ In addition, it consists of an easy-to-use mini-batch loader, a large number of 
 .. toctree::
    :glob:
    :maxdepth: 1
+   :caption: Examples
+
+   examples/01-quick_survey
+
+   
+.. toctree::
+   :glob:
+   :maxdepth: 1
    :caption: Package Reference
 
    modules/root

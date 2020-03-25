@@ -1,22 +1,21 @@
-Creating Message Passing Networks
+图网络消息传递框架
 =================================
 
-Generalizing the convolution operator to irregular domains is typically expressed as a *neighborhood aggregation* or *message passing* scheme.
-With :math:`\mathbf{x}^{(k-1)}_i \in \mathbb{R}^F` denoting node features of node :math:`i` in layer :math:`(k-1)` and :math:`\mathbf{e}_{j,i} \in \mathbb{R}^D` denoting (optional) edge features from node :math:`j` to node :math:`i`, message passing graph neural networks can be described as
+将卷积算子推广到不规则域 is typically expressed as a *neighborhood aggregation* or *message passing* scheme.
+我们用 :math:`\mathbf{x}^{(k-1)}_i \in \mathbb{R}^F` 表示第 :math:`(k-1)` 层 node :math:`i` 的节点特征， :math:`\mathbf{e}_{j,i} \in \mathbb{R}^D` 表示从node :math:`j` 到 node :math:`i` 的边特征， 则消息传递图神经网络可以描述为
 
 .. math::
   \mathbf{x}_i^{(k)} = \gamma^{(k)} \left( \mathbf{x}_i^{(k-1)}, \square_{j \in \mathcal{N}(i)} \, \phi^{(k)}\left(\mathbf{x}_i^{(k-1)}, \mathbf{x}_j^{(k-1)},\mathbf{e}_{j,i}\right) \right),
 
-where :math:`\square` denotes a differentiable, permutation invariant function, *e.g.*, sum, mean or max, and :math:`\gamma` and :math:`\phi` denote differentiable functions such as MLPs (Multi Layer Perceptrons).
+其中 :math:`\square` 表示具有置换不变性的可微函数(例如 sum, mean or max, and :math:`\gamma`)， :math:`\phi` 表示可微函数(例如多层感知机 MLPs).
 
 .. contents::
     :local:
 
-The "MessagePassing" Base Class
+"MessagePassing" 基类
 -------------------------------
 
-PyTorch Geometric provides the :class:`torch_geometric.nn.MessagePassing` base class, which helps in creating such kinds of message passing graph neural networks by automatically taking care of message propagation.
-The user only has to define the functions :math:`\phi` , *i.e.* :meth:`message`, and :math:`\gamma` , *.i.e.* :meth:`update`, as well as the aggregation scheme to use, *.i.e.* :obj:`aggr='add'`, :obj:`aggr='mean'` or :obj:`aggr='max'`.
+PyTorch Geometric 提供了 :class:`torch_geometric.nn.MessagePassing` 基类，来帮助创建消息传递图神经网络。因此我们只需要指定函数 :math:`\phi` , *i.e.* :meth:`message`, and :math:`\gamma` , *.i.e.* :meth:`update`, as well as the aggregation scheme to use, *.i.e.* :obj:`aggr='add'`, :obj:`aggr='mean'` or :obj:`aggr='max'`.
 
 This is done with the help of the following methods:
 
@@ -36,17 +35,18 @@ This is done with the help of the following methods:
 
 Let us verify this by re-implementing two popular GNN variants, the `GCN layer from Kipf and Welling <https://arxiv.org/abs/1609.02907>`_ and the `EdgeConv layer from Wang et al. <https://arxiv.org/abs/1801.07829>`_.
 
-Implementing the GCN Layer
+GCN层实现
 --------------------------
 
-The `GCN layer <https://arxiv.org/abs/1609.02907>`_ is mathematically defined as
+
+`GCN layer <https://arxiv.org/abs/1609.02907>`_ 在数学上定义为
 
 .. math::
 
     \mathbf{x}_i^{(k)} = \sum_{j \in \mathcal{N}(i) \cup \{ i \}} \frac{1}{\sqrt{\deg(i)} \cdot \sqrt{deg(j)}} \cdot \left( \mathbf{\Theta} \cdot \mathbf{x}_j^{(k-1)} \right),
 
 where neighboring node features are first transformed by a weight matrix :math:`\mathbf{\Theta}`, normalized by their degree, and finally summed up.
-This formula can be divided into the following steps:
+该公式可以分为以下步骤：
 
 1. Add self-loops to the adjacency matrix.
 2. Linearly transform node feature matrix.
@@ -55,9 +55,9 @@ This formula can be divided into the following steps:
 5. Sum up neighboring node features (:obj:`"add"` aggregation).
 6. Return new node embeddings in :math:`\gamma`.
 
-Steps 1-3 are typically computed before message passing takes place.
-Steps 4-6 can be easily processed using the :class:`torch_geometric.nn.MessagePassing` base class.
-The full layer implementation is shown below:
+
+通常在消息传递发生之前计算步骤1-3。使用 :class:`torch_geometric.nn.MessagePassing` 基类可以轻松地执行步骤4-6。完整的层实现如下所示：
+
 
 .. code-block:: python
 
@@ -118,26 +118,23 @@ The neighboring node features are normalized by computing node degrees :math:`\d
 
 In the :meth:`update` function, we simply return the output of the aggregation.
 
-That is all that it takes to create a simple message passing layer.
-You can use this layer as a building block for deep architectures.
-Initializing and calling it is straightforward:
+这就是创建简单的消息传递层所需的全部。您可以将此层用作深度架构的组件。初始化和调用很简单：
 
 .. code-block:: python
 
     conv = GCNConv(16, 32)
     x = conv(x, edge_index)
 
-Implementing the Edge Convolution
+边卷积层的实现
 ---------------------------------
 
-The `edge convolutional layer <https://arxiv.org/abs/1801.07829>`_ processes graphs or point clouds and is mathematically defined as
+`edge convolutional layer <https://arxiv.org/abs/1801.07829>`_ 用于处理图或点云，数学上定义为
 
 .. math::
 
     \mathbf{x}_i^{(k)} = \max_{j \in \mathcal{N}(i)} h_{\mathbf{\Theta}} \left( \mathbf{x}_i^{(k-1)}, \mathbf{x}_j^{(k-1)} - \mathbf{x}_i^{(k-1)} \right),
 
-where :math:`h_{\mathbf{\Theta}}` denotes a MLP.
-Analogous to the GCN layer, we can use the :class:`torch_geometric.nn.MessagePassing` class to implement this layer, this time using the :obj:`"max"` aggregation:
+其中 :math:`h_{\mathbf{\Theta}}` 表示一个 MLP. 类似与 GCN layer, 我们也可以用 :class:`torch_geometric.nn.MessagePassing` class 来实现 Edge Convolution, this time using the :obj:`"max"` aggregation:
 
 .. code-block:: python
 
@@ -172,8 +169,8 @@ Analogous to the GCN layer, we can use the :class:`torch_geometric.nn.MessagePas
 
 Inside the :meth:`message` function, we use :obj:`self.mlp` to transform both the target node features :obj:`x_i` and the relative source node features :obj:`x_j - x_i` for each edge :math:`(j,i) \in \mathcal{E}`.
 
-The edge convolution is actual a dynamic convolution, which recomputes the graph for each layer using nearest neighbors in the feature space.
-Luckily, PyTorch Geometric comes with a GPU accelerated batch-wise k-NN graph generation method named :meth:`torch_geometric.nn.knn_graph`:
+边卷积实际上是一种动态卷积，它使用特征空间中的最近邻居重新计算每一层的图。幸运的是，PyTorch Geometric comes with a GPU accelerated batch-wise k-NN graph generation method named :meth:`torch_geometric.nn.knn_graph`:
+
 
 .. code-block:: python
 
@@ -190,7 +187,7 @@ Luckily, PyTorch Geometric comes with a GPU accelerated batch-wise k-NN graph ge
 
 Here, :meth:`knn_graph` computes a nearest neighbor graph, which is further used to call the :meth:`forward` method of :class:`EdgeConv`.
 
-This leaves us with a clean interface for initializing and calling this layer:
+这为我们提供了一个干净的接口，用于初始化和调用此层：
 
 .. code-block:: python
 
