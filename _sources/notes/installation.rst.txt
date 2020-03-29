@@ -1,4 +1,4 @@
-PyG安装
+PyG 安装
 ============
 
 我们已经将 PyTorch Geometric 的许多功能外包给其他软件包，需要预先安装。
@@ -9,7 +9,7 @@ These packages come with their own CPU and GPU kernel implementations based on `
     请设置 `Anaconda/Miniconda <https://conda.io/docs/user-guide/install/index.html/>`_ 环境或创建 `Docker image <https://www.docker.com/>`_ 映像。
     
 安装步骤
------------------
+---------------
     
 请按照以下步骤来安装：
 
@@ -88,7 +88,7 @@ In case the FAQ does not help you in solving your problem, please create an `iss
 You should additionally verify that your CUDA is set up correctly by following the official `installation guide <https://docs.nvidia.com/cuda/index.html>`_, and that the `official extension example <https://github.com/pytorch/extension-cpp>`_ runs on your machine.
 
 C++/CUDA Extensions on macOS
-----------------------------
+------------------------------
 
 In order to compile CUDA extensions on macOS with Python <3.7, you need to replace the call
 

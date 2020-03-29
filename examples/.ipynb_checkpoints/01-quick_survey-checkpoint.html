@@ -91,7 +91,7 @@
             
               <p class="caption"><span class="caption-text">Notes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../notes/installation.html">PyG 安装</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../notes/installation.html#id1">安装步骤</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notes/installation.html#id2">常见问题集</a></li>
@@ -134,6 +134,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../01-quick_survey.html#重点阅读">重点阅读</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../01-quick_survey.html#图网络综述">图网络综述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../01-quick_survey.html#Introduction-to-Graph-Neural-Networks">Introduction to Graph Neural Networks</a></li>
 </ul>
 </li>
 </ul>
@@ -535,6 +539,49 @@ Networks）相关内容，受到了广大炼丹爱好者的高度评价（笑）
 <li><p>cora节点分类代码实例</p></li>
 <li><p>总结与讨论</p></li>
 </ol>
+</div>
+</div>
+<div class="section" id="图网络综述">
+<h2>图网络综述<a class="headerlink" href="#图网络综述" title="Permalink to this headline">¶</a></h2>
+<p>PyG 是图网络的快速方便的实现，而且总是有这样的需求“求大佬推荐些GNN的入门资料”，那么我们一个关于图网络理论的综述是必要的。</p>
+<ul class="simple">
+<li><p>刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：<a class="reference external" href="http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html">http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html</a></p></li>
+<li><p>一个关于GCN很详细的公式推导：<a class="reference external" href="https://zhuanlan.zhihu.com/p/100250297">https://zhuanlan.zhihu.com/p/100250297</a></p></li>
+<li><p>课件来啦！ 链接: <a class="reference external" href="https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w">https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w</a> 提取码: 45ns</p></li>
+</ul>
+<div class="section" id="Introduction-to-Graph-Neural-Networks">
+<h3>Introduction to Graph Neural Networks<a class="headerlink" href="#Introduction-to-Graph-Neural-Networks" title="Permalink to this headline">¶</a></h3>
+<p>Introduction to Graph Neural Networks by 刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：<a class="reference external" href="http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html">http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Table</span> <span class="n">of</span> <span class="n">Contents</span>
+<span class="n">Preface</span>
+<span class="n">Acknowledgments</span>
+<span class="n">Chapter</span> <span class="mi">1</span><span class="p">:</span> <span class="n">Introduction</span>
+<span class="n">Chapter</span> <span class="mi">2</span><span class="p">:</span> <span class="n">Basics</span> <span class="n">of</span> <span class="n">Math</span> <span class="ow">and</span> <span class="n">Graph</span>
+<span class="n">Chapter</span> <span class="mi">3</span><span class="p">:</span> <span class="n">Basics</span> <span class="n">of</span> <span class="n">Neural</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">4</span><span class="p">:</span> <span class="n">Vanilla</span> <span class="n">Graph</span> <span class="n">Neural</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">5</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Convolutional</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">6</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Recurrent</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">7</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Attention</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">8</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Residual</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">9</span><span class="p">:</span> <span class="n">Variants</span> <span class="k">for</span> <span class="n">Different</span> <span class="n">Graph</span> <span class="n">Types</span>
+<span class="n">Chapter</span> <span class="mi">10</span><span class="p">:</span> <span class="n">Variants</span> <span class="k">for</span> <span class="n">Advanced</span> <span class="n">Training</span> <span class="n">Methods</span>
+<span class="n">Chapter</span> <span class="mi">11</span><span class="p">:</span> <span class="n">General</span> <span class="n">Frameworks</span>
+<span class="n">Chapter</span> <span class="mi">12</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Structural</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">13</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Non</span><span class="o">-</span><span class="n">Structural</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">14</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Other</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">15</span><span class="p">:</span> <span class="n">Open</span> <span class="n">Resources</span>
+<span class="n">Chapter</span> <span class="mi">16</span><span class="p">:</span> <span class="n">Conclusion</span>
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">!</span>open .
+</pre></div>
+</div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>

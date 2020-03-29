@@ -93,7 +93,7 @@
             
               <p class="caption"><span class="caption-text">Notes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">PyG安装</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/installation.html">PyG 安装</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#id1">安装步骤</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notes/installation.html#id2">常见问题集</a></li>
@@ -136,6 +136,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#重点阅读">重点阅读</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#图网络综述">图网络综述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Introduction-to-Graph-Neural-Networks">Introduction to Graph Neural Networks</a></li>
 </ul>
 </li>
 </ul>
@@ -227,224 +231,6 @@
             
   
 <style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
-    border: none;
-    padding: 0 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    min-width: 5ex;
-    padding-top: 0.3rem;
-    padding-right: 0.3rem;
-    text-align: right;
-    flex: 0;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    background: #f5f5f5;
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
-
-
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 0.3rem;
-}
-
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-div.rendered_html th {
-  font-weight: bold;
-}
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
@@ -537,14 +323,39 @@ Networks）相关内容，受到了广大炼丹爱好者的高度评价（笑）
 <li><p>cora节点分类代码实例</p></li>
 <li><p>总结与讨论</p></li>
 </ol>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
 </div>
+<div class="section" id="图网络综述">
+<h2>图网络综述<a class="headerlink" href="#图网络综述" title="Permalink to this headline">¶</a></h2>
+<p>PyG 是图网络的快速方便的实现，而且总是有这样的需求“求大佬推荐些GNN的入门资料”，那么我们一个关于图网络理论的综述是必要的。</p>
+<ul class="simple">
+<li><p>刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：<a class="reference external" href="http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html">http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html</a></p></li>
+<li><p>一个关于GCN很详细的公式推导：<a class="reference external" href="https://zhuanlan.zhihu.com/p/100250297">https://zhuanlan.zhihu.com/p/100250297</a></p></li>
+<li><p>课件来啦！ 链接: <a class="reference external" href="https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w">https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w</a> 提取码: 45ns</p></li>
+</ul>
+<div class="section" id="Introduction-to-Graph-Neural-Networks">
+<h3>Introduction to Graph Neural Networks<a class="headerlink" href="#Introduction-to-Graph-Neural-Networks" title="Permalink to this headline">¶</a></h3>
+<p>Introduction to Graph Neural Networks by 刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：<a class="reference external" href="http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html">http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Table</span> <span class="n">of</span> <span class="n">Contents</span>
+<span class="n">Preface</span>
+<span class="n">Acknowledgments</span>
+<span class="n">Chapter</span> <span class="mi">1</span><span class="p">:</span> <span class="n">Introduction</span>
+<span class="n">Chapter</span> <span class="mi">2</span><span class="p">:</span> <span class="n">Basics</span> <span class="n">of</span> <span class="n">Math</span> <span class="ow">and</span> <span class="n">Graph</span>
+<span class="n">Chapter</span> <span class="mi">3</span><span class="p">:</span> <span class="n">Basics</span> <span class="n">of</span> <span class="n">Neural</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">4</span><span class="p">:</span> <span class="n">Vanilla</span> <span class="n">Graph</span> <span class="n">Neural</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">5</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Convolutional</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">6</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Recurrent</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">7</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Attention</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">8</span><span class="p">:</span> <span class="n">Graph</span> <span class="n">Residual</span> <span class="n">Networks</span>
+<span class="n">Chapter</span> <span class="mi">9</span><span class="p">:</span> <span class="n">Variants</span> <span class="k">for</span> <span class="n">Different</span> <span class="n">Graph</span> <span class="n">Types</span>
+<span class="n">Chapter</span> <span class="mi">10</span><span class="p">:</span> <span class="n">Variants</span> <span class="k">for</span> <span class="n">Advanced</span> <span class="n">Training</span> <span class="n">Methods</span>
+<span class="n">Chapter</span> <span class="mi">11</span><span class="p">:</span> <span class="n">General</span> <span class="n">Frameworks</span>
+<span class="n">Chapter</span> <span class="mi">12</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Structural</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">13</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Non</span><span class="o">-</span><span class="n">Structural</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">14</span><span class="p">:</span> <span class="n">Applications</span> <span class="o">--</span> <span class="n">Other</span> <span class="n">Scenarios</span>
+<span class="n">Chapter</span> <span class="mi">15</span><span class="p">:</span> <span class="n">Open</span> <span class="n">Resources</span>
+<span class="n">Chapter</span> <span class="mi">16</span><span class="p">:</span> <span class="n">Conclusion</span>
+</pre></div>
 </div>
 </div>
 </div>

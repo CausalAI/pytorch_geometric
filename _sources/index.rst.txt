@@ -3,6 +3,11 @@
 PyTorch Geometric Documentation
 ===============================
 
+本 `项目<https://github.com/CausalAI/pytorch_geometric>`_ 是关于 PyG 的编译和解读项目 by Heyang Gong; 大概会包含如下的内容:
+
+1. 简单翻译和理解 PyG 的官方教程
+2. 使用 PyG 来理解和实现图网络的基本内容
+
 PyTorch Geometric is a geometric deep learning extension library for `PyTorch <https://pytorch.org/>`_.
 
 It consists of various methods for deep learning on graphs and other irregular structures, also known as `geometric deep learning <http://geometricdeeplearning.com/>`_, from a variety of published papers.

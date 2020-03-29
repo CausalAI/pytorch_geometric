@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyG安装 &mdash; pytorch_geometric 1.4.3 documentation</title>
+  <title>PyG 安装 &mdash; pytorch_geometric 1.4.3 documentation</title>
   
 
   
@@ -93,7 +93,7 @@
             
               <p class="caption"><span class="caption-text">Notes</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">PyG安装</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PyG 安装</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">安装步骤</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#c-cuda-extensions-on-macos">C++/CUDA Extensions on macOS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id2">常见问题集</a></li>
@@ -107,16 +107,16 @@
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#id3">图网络端对端例子</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="create_gnn.html">Creating Message Passing Networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#the-messagepassing-base-class">The “MessagePassing” Base Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#implementing-the-gcn-layer">Implementing the GCN Layer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#implementing-the-edge-convolution">Implementing the Edge Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_gnn.html">图网络消息传递框架</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#messagepassing">“MessagePassing” 基类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#gcn">GCN层实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_gnn.html#id2">边卷积层的实现</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="create_dataset.html">Creating Your Own Datasets</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="create_dataset.html">构建数据集</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-in-memory-datasets">Creating “In Memory Datasets”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create_dataset.html#creating-larger-datasets">Creating “Larger” Datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_dataset.html#id2">常见问题集</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="batching.html">Advanced Mini-Batching</a><ul>
@@ -124,7 +124,7 @@
 <li class="toctree-l2"><a class="reference internal" href="batching.html#bipartite-graphs">Bipartite Graphs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="resources.html">External Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resources.html">相关资料</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -136,6 +136,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#重点阅读">重点阅读</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#GCN,GAT,GraphSAGE框架回顾及其PyG复现">GCN,GAT,GraphSAGE框架回顾及其PyG复现</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/01-quick_survey.html#图网络综述">图网络综述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/01-quick_survey.html#Introduction-to-Graph-Neural-Networks">Introduction to Graph Neural Networks</a></li>
 </ul>
 </li>
 </ul>
@@ -206,7 +210,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>PyG安装</li>
+      <li>PyG 安装</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -250,7 +254,7 @@
 }
 </style>
 <div class="section" id="pyg">
-<h1>PyG安装<a class="headerlink" href="#pyg" title="Permalink to this headline">¶</a></h1>
+<h1>PyG 安装<a class="headerlink" href="#pyg" title="Permalink to this headline">¶</a></h1>
 <p>我们已经将 PyTorch Geometric 的许多功能外包给其他软件包，需要预先安装。
 These packages come with their own CPU and GPU kernel implementations based on <a class="reference external" href="https://github.com/pytorch/extension-cpp/">C++/CUDA extensions</a> introduced in PyTorch 0.4.0.</p>
 <div class="admonition note">
