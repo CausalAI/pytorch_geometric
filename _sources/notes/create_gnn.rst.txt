@@ -1,5 +1,5 @@
 图网络消息传递框架
-=================================
+================================
 
 将卷积算子推广到不规则域 is typically expressed as a *neighborhood aggregation* or *message passing* scheme.
 我们用 :math:`\mathbf{x}^{(k-1)}_i \in \mathbb{R}^F` 表示第 :math:`(k-1)` 层 node :math:`i` 的节点特征， :math:`\mathbf{e}_{j,i} \in \mathbb{R}^D` 表示从node :math:`j` 到 node :math:`i` 的边特征， 则消息传递图神经网络可以描述为
@@ -7,7 +7,7 @@
 .. math::
   \mathbf{x}_i^{(k)} = \gamma^{(k)} \left( \mathbf{x}_i^{(k-1)}, \square_{j \in \mathcal{N}(i)} \, \phi^{(k)}\left(\mathbf{x}_i^{(k-1)}, \mathbf{x}_j^{(k-1)},\mathbf{e}_{j,i}\right) \right),
 
-其中 :math:`\square` 表示具有置换不变性的可微函数(例如 sum, mean or max, and :math:`\gamma`)， :math:`\phi` 表示可微函数(例如多层感知机 MLPs).
+其中 :math:`\square` 表示具有置换不变性的可微函数(例如 sum, mean or max, and :math:`\gamma`)， :math:`\phi` 表示可微函数(例如多层感知机 MLPs).  
 
 .. contents::
     :local:
@@ -15,7 +15,7 @@
 "MessagePassing" 基类
 -------------------------------
 
-PyTorch Geometric 提供了 :class:`torch_geometric.nn.MessagePassing` 基类，来帮助创建消息传递图神经网络。因此我们只需要指定函数 :math:`\phi` , *i.e.* :meth:`message`, and :math:`\gamma` , *.i.e.* :meth:`update`, as well as the aggregation scheme to use, *.i.e.* :obj:`aggr='add'`, :obj:`aggr='mean'` or :obj:`aggr='max'`.
+PyTorch Geometric 提供了 :class:`torch_geometric.nn.MessagePassing` 基类，来帮助创建消息传递图神经网络。因此我们只需要指定函数 :math:`\phi` , *i.e.* :meth:`message`, and :math:`\gamma` , *.i.e.* :meth:`update`, as well as the aggregation scheme to use, *.i.e.* :obj:`aggr='add'`, :obj:`aggr='mean'` or :obj:`aggr='max'`. 
 
 This is done with the help of the following methods:
 

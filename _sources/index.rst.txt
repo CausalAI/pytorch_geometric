@@ -3,7 +3,7 @@
 PyTorch Geometric Documentation
 ===============================
 
-本 `项目<https://github.com/CausalAI/pytorch_geometric>`_ 是关于 PyG 的编译和解读项目 by Heyang Gong; 大概会包含如下的内容:
+本 `项目 <https://github.com/CausalAI/pytorch_geometric>`_ 是关于 PyG 的编译和解读项目 by Heyang Gong; 大概会包含如下的内容:
 
 1. 简单翻译和理解 PyG 的官方教程
 2. 使用 PyG 来理解和实现图网络的基本内容
@@ -13,7 +13,7 @@ PyTorch Geometric is a geometric deep learning extension library for `PyTorch <h
 It consists of various methods for deep learning on graphs and other irregular structures, also known as `geometric deep learning <http://geometricdeeplearning.com/>`_, from a variety of published papers.
 In addition, it consists of an easy-to-use mini-batch loader, a large number of common benchmark datasets (based on simple interfaces to create your own), and helpful transforms, both for learning on arbitrary graphs as well as on 3D meshes or point clouds.
 
-.. toctree::
+.. toctree:: 
    :glob:
    :maxdepth: 1
    :caption: Notes
@@ -28,10 +28,10 @@ In addition, it consists of an easy-to-use mini-batch loader, a large number of 
 .. toctree::
    :glob:
    :maxdepth: 1
-   :caption: Examples
+   :caption: Graph Networks
 
-   examples/01-quick_survey
-
+   notebooks/01-quick_survey
+   notebooks/02-researchers
    
 .. toctree::
    :glob:

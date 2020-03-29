@@ -1,0 +1,356 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# PyG 的快速调研\n",
+    "\n",
+    "这是关于 PyG 的快速调研."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 资料"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[图神经网络（GNN）教程 – 用 PyTorch 和 PyTorch Geometric 实现 Graph Neural Networks](https://www.pytorchtutorial.com/pytorch-geometric-for-gnn/)\n",
+    "\n",
+    "图神经网络（Graph Neural Networks）最近是越来越火，很多问题都可以用图神经网络找到新的解决方法。 今天我们就来看怎么用 PyTorch 和 PyTorch Geometric (PyG) 实现图神经网络。PyG 是一款号称比 DGL 快 14 倍的基于 PyTorch 的几何深度学习框架，可以简单方便的实现图神经网络。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[PyTorch Geometric 攻略](https://www.jiqizhixin.com/articles/2019-07-16-11)\n",
+    "\n",
+    "PyTorch Geometric 中设计了一种新的表示图数据的存储结构，也是 PyTorch Geometric中实现的各种方法的基本数据形式。\n",
+    "\n",
+    "在 PyTorch Geometric 中，一个图被定义为g=(X,(I,E))，其中X表示节点的特征矩阵，N为节点的个数，F为每个节点的特征数；用I,E这种元组形式表示图的稀疏邻接矩阵，I为边的索引，E为D维的边特征。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[比DGL快14倍：PyTorch图神经网络库PyG上线了](https://www.jiqizhixin.com/articles/2019-03-09-5)\n",
+    "\n",
+    "图神经网络是最近 AI 领域最热门的方向之一，很多图神经网络框架如 graph_nets 和 DGL 已经上线。但看起来这些工具还有很多可以改进的空间。近日，来自德国多特蒙德工业大学的研究者们提出了 PyTorch Geometric，该项目一经上线便在 GitHub 上获得 1500 多个 star，并得到了 Yann LeCun 的点赞。现在，创建新的 GNN 层更加容易了。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[官方 PyTorch Geometric (PyG) is a geometric deep learning extension library for PyTorch.](https://github.com/rusty1s/pytorch_geometric)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[Hands-on Graph Neural Networks with PyTorch & PyTorch Geometric](https://towardsdatascience.com/hands-on-graph-neural-networks-with-pytorch-pytorch-geometric-359487e221a8)\n",
+    "\n",
+    "在上一篇文章中，我介绍了图形神经网络（GNN）的概念及其一些最新进展。由于this topic is getting seriously hyped up，因此我决定制作本教程，以介绍如何在您的项目中轻松实现Graph Neural Network。您将学习如何使用PyTorch Geometric构建自己的GNN，以及如何使用GNN解决实际问题（Recsys Challenge 2015）。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[Pytorch 图神经网络（GNN）实战推荐](https://www.080910t.com/2019/06/11/pytorch-%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88gnn%EF%BC%89%E5%AE%9E%E6%88%98%E6%8E%A8%E8%8D%90/)\n",
+    "\n",
+    "最近以来图神经网络 (GNN) 在各个领域越来越受到欢迎，包括社交网络、知识图谱、推荐系统，甚至生命科学。GNN 在对图形中节点间的依赖关系进行建模方面能力强大，使得图分析相关的研究领域取得了突破性进展。今天给大家推荐一篇关于 Pytorch 实战图神经网络的笔记，图神经网络在最近的学术界和工业界都十分的火热，非常值得一学！"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[GeniePath：自适应感受路径的图神经网络 | 图网络论文分享](https://swarma.org/?p=15885)\n",
+    "\n",
+    "本文详细解读了蚂蚁金服发表于 KDD 2018 的论文 GeniePath，一种自适应感受路径的图神经网络（Graph Neural Networks, GNN）方法。其创新点在于能够根据具体任务自动选取有用的高阶邻域信息。6月3日21:00-22:00，本文作者王硕将在集智俱乐部 B 站直播间解读这篇论文。直播间地址见文末。\n",
+    "\n",
+    "- 集智图网络线上读书会正式公开招募，如果你也对图网络感兴趣，想分享你最近读过的论文，欢迎填表报名。（详情见文末）"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[FAST GRAPH REPRESENTATION LEARNING WITH PYTORCH GEOMETRIC](https://dongzhixiao.github.io/2019/05/31/PyG/)\n",
+    "\n",
+    "本篇论文发表在ICLR 2019 (RLGM Workshop on Representation Learning on Graphs and Manifolds)，该论文也是Open Data Science总结2019第一季度的深度学习十佳论文排名第一的论文\n",
+    "参考资料：https://tech.sina.com.cn/csj/2019-05-07/doc-ihvhiews0329883.shtml和https://medium.com/@ODSC/best-deep-learning-research-of-2019-so-far-7bea0ed22e38\n",
+    "\n",
+    "第一作者：Matthias Fey德国多特蒙德工业大学博二学生"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 综述理解"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[GraphNeuralNetwork](https://github.com/xchadesi/GraphNeuralNetwork) 对图网络非常好的一个表格化的综合。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[从图(Graph)到图卷积(Graph Convolution): 漫谈图神经网络](https://github.com/SivilTaram/Graph-Neural-Network-Note)\n",
+    "\n",
+    "笔者最近看了一些图与图卷积神经网络的论文，深感其强大，但一些Survey或教程默认了读者对图神经网络背景知识的了解，对未学过信号处理的读者不太友好。同时，很多教程只讲是什么，不讲为什么，也没有梳理清楚不同网络结构的区别与设计初衷(Motivation)。\n",
+    "\n",
+    "因此，本文试图沿着图神经网络的历史脉络，从最早基于不动点理论的图神经网络(Graph Neural Network， GNN)一步步讲到当前用得最火的图卷积神经网络(Graph Convolutional Neural Network， GCN)， 期望通过本文带给读者一些灵感与启示。\n",
+    "\n",
+    "本文的提纲与叙述要点主要参考了3篇图神经网络的Survey，分别是来自IEEE Fellow的A Comprehensive Survey on Graph Neural Networks[1]，来自清华大学朱文武老师组的Deep Learning on Graphs: A Survey[7]，以及来自清华大学孙茂松老师组的Graph Neural Networks: A Review of Methods and Applications[14], 在这里向三篇Survey的作者表示敬意。\n",
+    "同时，本文关于部分图卷积神经网络的理解很多都是受到知乎问题[8]高赞答案的启发，非常感谢他们的无私分享！\n",
+    "最后，本文还引用了一些来自互联网的生动形象的图片，在这里也向这些图片的作者表示感谢。本文中未注明出处的图片均为笔者制作，如需转载或引用请联系本人。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[GCN,GAT,GraphSAGE框架回顾及其PyG复现](http://qiniu.swarma.org/public/file/ppt/20190411102414.pdf)\n",
+    "\n",
+    "本课程来自集智第 4 期图网络论文解读活动。本课程来自图网络论文解读系列活动，主要回顾了图神经网络的发展，引入介绍了PyG图神经网络开发框架，并展示了部分代码实现。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[GNN 系列：Graph 基础知识介绍](https://blog.csdn.net/datawhale/article/details/98140735)\n",
+    "\n",
+    "导读】图卷积神经网络(Graph Convolutional Network)作为最近几年兴起的一种基于图结构的广义神经网络结构，因为其独特的计算能力，而受到广泛学者的关注与研究。传统深度学习模型 LSTM 和 CNN 在欧几里得空间数据(语言，图像，视频等)上取得了不错的成绩，但是在对非欧几里得空间数据(eg：社交网络、信息网络等)进行处理上却存在一定的局限性。针对该问题，研究者们引入了图论中抽象意义上的图(Graph)来表示非欧几里得结构化数据。并利用图卷积网络对来图(Graph)数据进行处理，以深入发掘其特征和规律。本文首先分别介绍了欧几里得结构化数据和非欧几里得结构化数据特点；然后，针对非欧几里得结构化数据的表示问题，引入了图论中抽象意义上的图(Graph)概念，并对图(Graph)中一些表示形式进行介绍；最后，通过一个简单的例子，对图(Graph)数据的应用进行介绍，以帮助读者加深对图(Graph)的理解。\n",
+    "————————————————\n",
+    "版权声明：本文为CSDN博主「Datawhale」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。\n",
+    "原文链接：https://blog.csdn.net/datawhale/article/details/98140735"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[图卷积神经网络的变种与挑战【附PPT与视频资料】](https://zhuanlan.zhihu.com/p/59613624)\n",
+    "\n",
+    "半监督图卷积神经网络(Semi-GCN)对原始的GCN进行了约束与简化，也因此诞生了诸多研究方向。GraphSAGE首先归纳出了Neighbor Aggregate模式；GAT将Attention机制引入到了GCN当中；GeniePath尝试将GCN的层次做深。本次讨论将主要介绍semi-GCN之后的这些变体与它们之间的联系，以及当前GCN研究当中的问题与挑战。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[图神经网络三剑客：GCN、GAT与GraphSAGE](https://blog.csdn.net/c9Yv2cf9I06K2A9E/article/details/104548928)\n",
+    "\n",
+    "2019 年号称图神经网络元年，在各个领域关于图神经网络的研究爆发式增长。本文主要介绍一下三种常见图神经网络：GCN、GAT 以及 GraphSAGE。前两者是目前应用比较广泛的图神经网络，后者则为图神经网络的工程应用提供了基础。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 课程内容"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[CS224w 图神经网络（Graph Neural Networks）\n",
+    "](https://zhuanlan.zhihu.com/p/113862170)\n",
+    "\n",
+    "在之前的内容里我们讨论了图像和自然语言的机器学习方法以及简单的强化学习方法，今天开始我们要接触到机器学习的另一个有趣的领域——图机器学习。下面为大家带来斯坦福图机器学习CS224w 2019的Assginment 2的解析，还请大家多多指教~！\n",
+    "\n",
+    "本门课程原来叫Analysis of Networks，也就是传统的网络分析，19年秋季改名为Machine Learning with Graphs，可见GNN等一系列方法对传统网络分析研究的推动。19年秋季课程除了传统网络分析涵盖的网络特征（度、直径、聚集系数、模块度等）、网络模型（随机网络、小世界等）、社团发现、网络连接分析（PageRank）、网络传染模型（SIR）等，全新加入了图神经网络（Graph Neural Networks）相关内容，受到了广大炼丹爱好者的高度评价（笑）。关于网络分析的理论与作业内容这里就不再赘述，感兴趣的炼丹爱好者们可以根据视频内容进行进一步研究，这里我们只结合Assignment 2对图神经网络的理论与实践进行详细介绍。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[【南洋理工大学课程】图神经网络，Graph Neural Networks，附121页PPT](https://www.zhuanzhi.ai/vip/01cabe8102fe579108a61a8cd63dde28)\n",
+    "\n",
+    "[AAAI2020最新「图神经网络GNN模型与应用」305页ppt，密歇根州立大学](https://www.zhuanzhi.ai/vip/7c5ac22b9999480fc67c00aee515de2f)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[图网络框架回顾及其 PyG 复现——图网络读书会第 4 期](http://campus.swarma.org/play/coursedetail?id=10843)\n",
+    "\n",
+    "本课程来自集智第 4 期图网络论文解读活动。本课程来自图网络论文解读系列活动，主要回顾了图神经网络的发展，引入介绍了PyG图神经网络开发框架，并展示了部分代码实现。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 重点阅读"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### GCN,GAT,GraphSAGE框架回顾及其PyG复现\n",
+    "\n",
+    "该文件很简短，总结性的，推荐了 PyG "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "[GCN,GAT,GraphSAGE框架回顾及其PyG复现](http://qiniu.swarma.org/public/file/ppt/20190411102414.pdf) 这是一个总结性 Slide!\n",
+    "\n",
+    "本课程来自集智第 4 期图网络论文解读活动。本课程来自图网络论文解读系列活动，主要回顾了图神经网络的发展，引入介绍了PyG图神经网络开发框架，并展示了部分代码实现。\n",
+    "\n",
+    "1. 图表示学习\n",
+    "2. 图神经网络的发展\n",
+    "3. PyG图神经网络开发框架\n",
+    "4. cora节点分类代码实例\n",
+    "5. 总结与讨论\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 图网络综述\n",
+    "\n",
+    "PyG 是图网络的快速方便的实现，而且总是有这样的需求“求大佬推荐些GNN的入门资料”，那么我们一个关于图网络理论的综合调研是必要的。"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- 刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html\n",
+    "- gjsong@pku.edu.cn 宋老师(62754785) 课件来啦！ 链接: https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w 提取码: 45ns\n",
+    "- 沈华伟老师 中科院，谱方法是空间方法的一个特例，它有显示变换的空间。\n",
+    "- 唐杰 （Tsinghua GNN 和认知推理）\n",
+    "- 石川 (北邮，电商中的应用)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- 一个关于GCN很详细的公式推导：https://zhuanlan.zhihu.com/p/100250297"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Introduction to Graph Neural Networks\n",
+    "\n",
+    "\n",
+    "\n",
+    "Introduction to Graph Neural Networks by 刘知远: 话说我们刚把之前GNN的综述扩展成一本tutorial book，欢迎大家浏览：http://nlp.csai.tsinghua.edu.cn/~lzy/books/gnn_2020.html\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n",
+    "    Table of Contents\n",
+    "    Preface\n",
+    "    Acknowledgments\n",
+    "    Chapter 1: Introduction\n",
+    "    Chapter 2: Basics of Math and Graph\n",
+    "    Chapter 3: Basics of Neural Networks\n",
+    "    Chapter 4: Vanilla Graph Neural Networks\n",
+    "    Chapter 5: Graph Convolutional Networks\n",
+    "    Chapter 6: Graph Recurrent Networks\n",
+    "    Chapter 7: Graph Attention Networks\n",
+    "    Chapter 8: Graph Residual Networks\n",
+    "    Chapter 9: Variants for Different Graph Types\n",
+    "    Chapter 10: Variants for Advanced Training Methods\n",
+    "    Chapter 11: General Frameworks\n",
+    "    Chapter 12: Applications -- Structural Scenarios\n",
+    "    Chapter 13: Applications -- Non-Structural Scenarios\n",
+    "    Chapter 14: Applications -- Other Scenarios\n",
+    "    Chapter 15: Open Resources\n",
+    "    Chapter 16: Conclusion\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 为什么图网络会有用？\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "一种理解：平移不变性是图像的卷积网络能够很好运作的根本的原因，那么无处不在的分形结构现象和数据是我们图卷积网络 work 的基本原因，图卷积是一个推数据的信息的 abstract。\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  },
+  "toc": {
+   "base_numbering": 1,
+   "nav_menu": {},
+   "number_sections": true,
+   "sideBar": true,
+   "skip_h1_title": false,
+   "title_cell": "Table of Contents",
+   "title_sidebar": "Contents",
+   "toc_cell": false,
+   "toc_position": {},
+   "toc_section_display": true,
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

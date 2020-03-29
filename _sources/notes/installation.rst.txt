@@ -11,7 +11,7 @@ These packages come with their own CPU and GPU kernel implementations based on `
 安装步骤
 ---------------
     
-请按照以下步骤来安装：
+请按照以下步骤来安装： 
 
 #. 确保已安装PyTorch 1.4.0：
 
