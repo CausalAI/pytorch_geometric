@@ -21,9 +21,11 @@
 [![Code Coverage][coverage-image]][coverage-url]
 [![Contributing][contributing-image]][contributing-url]
 
-**[Documentation](https://pytorch-geometric.readthedocs.io)** | **[Paper](https://arxiv.org/abs/1903.02428)** | **[External Resources](https://pytorch-geometric.readthedocs.io/en/latest/notes/resources.html)**
+**[Documentation](https://causalai.github.io/pytorch_geometric/)** | **[Paper](https://arxiv.org/abs/1903.02428)** | **[External Resources](https://pytorch-geometric.readthedocs.io/en/latest/notes/resources.html)**
 
-*PyTorch Geometric* (PyG) is a geometric deep learning extension library for [PyTorch](https://pytorch.org/). 本项目编译 PyG 的说明文档，加入一些帮助理解文档。
+Motivation: 作为一个图网络的新手，希望和大家一起学习熟练的使用 PyG.
+
+*PyTorch Geometric* (PyG) is a geometric deep learning extension library for [PyTorch](https://pytorch.org/). 本项目编译 PyG 的说明文档，加入一些理解和解读文档。
 
 It consists of various methods for deep learning on graphs and other irregular structures, also known as *[geometric deep learning](http://geometricdeeplearning.com/)*, from a variety of published papers.
 In addition, it consists of an easy-to-use mini-batch loader for many small and single giant graphs, multi gpu-support, a large number of common benchmark datasets (based on simple interfaces to create your own), and helpful transforms, both for learning on arbitrary graphs as well as on 3D meshes or point clouds.
