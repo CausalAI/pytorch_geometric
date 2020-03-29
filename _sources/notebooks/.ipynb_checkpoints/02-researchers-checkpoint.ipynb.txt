@@ -13,18 +13,29 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## Tsinghua \n",
+    "## 北京智源人工智能研究院 \n",
     "\n",
     "\n",
-    "清华大学有若干图网络的一线工作者，包括刘知远，唐杰等等\n",
-    "\n"
+    "- 清华大学有若干图网络的一线工作者，包括刘知远，唐杰 jietang@tsinghua.edu.cn 等等\n",
+    "- 石川 (北邮，电商中的应用)\n",
+    "- 沈伟华 中科院 shenhuawei@ict.ac.cn Convolutional Neural Networks\n",
+    "- gjsong@pku.edu.cn 宋老师(62754785) 课件来啦！ 链接: https://pan.baidu.com/s/1Mj6i0I0jH5KF9MRpABwp1w 提取码: 45ns\n"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## Bengio"
+    "## 图网络和因果推理"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "唐杰，jietang@tsinghua.edu.cn, http://keg.cs.tsinghua.edu.cn/jietang/\n",
+    "\n",
+    "Tsinghua: Stable Learning: The Convergence of Machine Learning and Causal Inference, by Cui Peng(cuip@tsinghua.edu.cn) http://pengcui.thumedialab.com/"
    ]
   },
   {
