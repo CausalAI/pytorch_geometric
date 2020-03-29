@@ -23,7 +23,7 @@
 
 **[Documentation](https://causalai.github.io/pytorch_geometric/)** | **[Paper](https://arxiv.org/abs/1903.02428)** | **[External Resources](https://pytorch-geometric.readthedocs.io/en/latest/notes/resources.html)**
 
-Motivation: 作为一个图网络的新手，希望和大家一起学习熟练的使用 PyG.
+Motivation: 作为一个图网络的新手，希望和大家一起学习熟练的使用 PyG 搭建图网络，解决相关问题.
 
 *PyTorch Geometric* (PyG) is a geometric deep learning extension library for [PyTorch](https://pytorch.org/). 本项目编译 PyG 的说明文档，加入一些理解和解读文档。
 
